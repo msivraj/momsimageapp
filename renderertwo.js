@@ -68,25 +68,25 @@ function displayNextTwoHundredImages(items){
    function addImagesToPage(img, path, href, imgNum){
      var newSpan=document.createElement('span');
      newSpan.id='sp'+imgNum; 
-    // <input type="image" class="thumb0" src="/Users/msivraj/Downloads/delicate-arch-night-stars-landscape.jpg" onClick= "this.style.visibility= 'hidden', action();" /> 
+    //  <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" />
 
-    // newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'">' +
-    // '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
-    // '<div class="lightbox-target" id="div'+imgNum+'">' +
-    // ' <div id="buttonDiv">' +
-    // '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-    // ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
-    // '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
-    // '<a class="lightbox-close" href="#work"> </a> </div>';
-    
-    newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'">' +
-    '<input type="image" class="lazyload thumbnail thumb0" data-src="'+path+'" onclick="displaySavedMemory('+imgNum+');"/></a>' +
+    newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
+    '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
     '<div class="lightbox-target" id="div'+imgNum+'">' +
     ' <div id="buttonDiv">' +
     '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
     ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
     '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
     '<a class="lightbox-close" href="#work"> </a> </div>';
+    
+    // newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'">' +
+    // '<input type="image" class="lazyload thumbnail thumb0" data-src="'+path+'" onclick="displaySavedMemory('+imgNum+');"/></a>' +
+    // '<div class="lightbox-target" id="div'+imgNum+'">' +
+    // ' <div id="buttonDiv">' +
+    // '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
+    // ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
+    // '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
+    // '<a class="lightbox-close" href="#work"> </a> </div>';
     
      document.getElementById('images').appendChild(newSpan);
      //var imageElement=document.getElementById(id); NOT SURE IF COMMENTING THIS OUT IS THE RIGHT MOVE
@@ -96,7 +96,7 @@ function displayNextTwoHundredImages(items){
    
    function saveMemory(buttonId, imgNum){
      var folderLocation="/Users/msivraj/Documents/memories"
-     var file='/memory'+imgNum;
+     var file='/memory'+imgNum+'.txt';
      var textBoxId='memory'+imgNum;
      var filePath= folderLocation + file;
      
@@ -107,18 +107,18 @@ function displayNextTwoHundredImages(items){
    
    function displaySavedMemory(imgNumber){
      var folderLocation="/Users/msivraj/Documents/memories"
-     var file='/memory'+imgNumber;
+     var file='/memory'+imgNumber+'.txt';
      var textBoxId='memory'+imgNumber;
      var filePath= folderLocation + file;
      var fs = require('fs');
-     fs.readdir(filePath, function(err, items){
+     
+     
+     
+     fs.readFile(filePath, function(err, items){
        
        //document.write(items);
        document.getElementById(textBoxId).value = items;
-     });
-     
-     //make image tags input tags and add method to display saved memores in text area tag
-     
+     });     
    }
    
    function isVisible(){
