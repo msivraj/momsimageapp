@@ -1,0 +1,229 @@
+.thumb0 {
+    height: 150px;
+    /*margin: 50px 30px 0 0; /*spacing around the image*/
+    width: 200px;
+    /*position: relative;*/
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 0px;
+    margin-right: 25px;
+    margin-bottom: 10px;
+    /*margin: 30px 20px 20px 100px;*/
+    position:relative;
+    z-index: 1;
+  }
+  
+  .thumbnail:hover{
+    position: relative;
+    z-index: 2;
+    -webkit-transform: scale(3);
+    -moz-transform: scale(3);
+    -o-transform: scale(3);
+    transform: scale(3);
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+  }
+  
+  #clickMe{
+    /*position: fixed;*/
+    /*left:0%;*/
+    /*z-index: 1;*/
+    width: 100px;
+  }
+  
+  #clearIndex{
+    /*position: fixed;
+    z-index: 1;*/
+  }
+  
+  #images{
+    position:relative;
+    overflow: visible;
+    width: 1200px;
+    margin: auto;
+    margin-left:10.45%;
+    
+  }
+  
+  #familyQuote{
+    /*position: fixed;*/
+    /*z-index: 1:*/
+  }
+  
+  #quote1{
+    font-size: 2.5em;
+    /*font-family:inherit;*/
+  }
+  
+  #memorySave{
+    position: relative;
+    z-index: 3;
+  }
+  
+  /*#memoryLable{
+    position: relative;
+    z-index: 3;
+  }*/
+  /*#memoryButton{
+  display: none;
+}*/
+/*#memorySpan{
+  position: fixed;
+  left: 65%;
+  -webkit-appearance: button;
+  /*padding: 2px;*/
+/*}
+#memoryButton:not(:checked) + textarea{
+  display:none;
+}*/
+.textbox{
+  position: relative;
+  top:90.5%;
+  left:9%;
+  z-index: 3;
+  
+}
+
+#add{
+  position: relative;
+  z-index: 3;
+}
+  
+.showButon{
+    background:url('http://spacetelescope.github.io/understanding-json-schema/_static/pass.png');
+    background-repeat:repeat-y;
+    height:30px;
+    text-indent:20px;
+}
+#myDiv{
+  
+}
+  
+#info{
+  
+}
+
+.hide{
+display:none;
+}
+
+.show{
+display:block;
+}
+  /*Eliminates padding, centers the thumbnail */
+/* Styles the thumbnail */
+
+/*a.lightbox img {
+height: 150px;
+border: 3px solid white;
+box-shadow: 0px 0px 8px rgba(0,0,0,.3);
+margin: 94px 20px 20px 20px;
+}*/
+
+/* Styles the lightbox, removes it from sight and adds the fade-in transition */
+
+.lightbox-target {
+position: fixed;
+top: -100%;
+width: 100%;
+/*background: rgba(0,0,0,.7);*/
+/*width: 500%;*/
+/*opacity: .8;*/
+-webkit-transition: opacity .5s ease-in-out;
+-moz-transition: opacity .5s ease-in-out;
+-o-transition: opacity .5s ease-in-out;
+transition: opacity .5s ease-in-out;
+overflow: hidden;
+z-index: 2;
+}
+
+/* Styles the lightbox image, centers it vertically and horizontally, adds the zoom-in transition and makes it responsive using a combination of margin and absolute positioning */
+
+.lightbox-target img {
+margin: auto;
+position: absolute;
+top: 0;
+left:28px;
+bottom: 0px;
+max-height: 0%;
+max-width: 0%;
+/*border: 3px solid white;*/
+/*box-shadow: 0px 0px 100px rgba(0,0,0,.3);*/
+border: 75px solid rgba(0, 0, 0, 1);
+box-sizing: border-box;
+-webkit-transition: .5s ease-in-out;
+-moz-transition: .5s ease-in-out;
+-o-transition: .5s ease-in-out;
+transition: .5s ease-in-out;
+}
+
+/* Styles the close link, adds the slide down transition */
+
+/*a.lightbox-close {
+display: block;
+width:50px;
+height:50px;
+box-sizing: border-box;
+background: white;
+color: black;
+text-decoration: none;
+position: absolute;
+top: -80px;
+right: 0;
+-webkit-transition: .5s ease-in-out;
+-moz-transition: .5s ease-in-out;
+-o-transition: .5s ease-in-out;
+transition: .5s ease-in-out;
+}*/
+
+/* Provides part of the "X" to eliminate an image from the close link */
+
+a.lightbox-close:before {
+content: "";
+display: block;
+height: 30px;
+width: 3px;
+background: white;
+position: absolute;
+left: 45px;
+top:10px;
+-webkit-transform:rotate(45deg);
+-moz-transform:rotate(45deg);
+-o-transform:rotate(45deg);
+transform:rotate(45deg);
+}
+
+/* Provides part of the "X" to eliminate an image from the close link */
+
+a.lightbox-close:after {
+content: "";
+display: block;
+height: 30px;
+width: 3px;
+background: white;
+position: absolute;
+left: 45px;
+top:10px;
+-webkit-transform:rotate(-45deg);
+-moz-transform:rotate(-45deg);
+-o-transform:rotate(-45deg);
+transform:rotate(-45deg);
+}
+
+/* Uses the :target pseudo-class to perform the animations upon clicking the .lightbox-target anchor */
+
+.lightbox-target:target {
+opacity: 1;
+top: 0;
+bottom: 0;
+left:9%;
+}
+
+.lightbox-target:target img {
+max-height: 100%;
+max-width: 100%;
+}
+
+.lightbox-target:target a.lightbox-close {
+top: 0px;
+}
