@@ -1,9 +1,12 @@
 var count=0;
-const folder='/Users/msivraj/Documents/2006_12_25';
+const imgFolder='/Users/msivraj/Documents/2006_12_25';
+// var menu = document.getElementById("numOfImgMenu");
+// var imgsToDisplay = menu.options[menu.selectedIndex].text;
+var numOfDisplayedImgs=10;
 var PouchDB = require('pouchdb');
 var db = new PouchDB('my_db');
 var remoteCouch=false;
-
+// const fs = require('fs-extra')
 
 
 // this is all for pouchdb
@@ -26,24 +29,93 @@ var remoteCouch=false;
 //     redrawTodosUI(doc.rows);
 //   });
 // }
-
-
-
-
-
 window.addEventListener("DOMContentLoaded", function(event) {
-  startApp();
+  // var newinput=document.createElement("input");
+  // newinput.id="nextpage";
+  // newinput.type="button";
+  // newinput.value="Next Page";
+  // newinput.onclick=loadNextImages;
+  // document.getElementById("buttons").appendChild(newinput);
+  // <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
+
+  loadNextImages();
+  startApp(false);
     window.setTimeout(function() { lazyload(); }, 200);
 });
 
+// function isNumofImgstoDisplayChanged(){
+//   var m = document.getElementById("numOfImgMenu");
+//   var num = menu.options[menu.selectedIndex].text;
+//   
+//   if(imgsToDisplay<num){
+//     
+//   }else if (imgsToDisplay>num) {
+//     
+//   }else{
+//     
+//   }
+// }
 
-function displayNextTwoHundredImages(items){
+function deleteImages(){
+  document.getElementById('images').innerHTML="";
+
+}
+
+function loadNextImages(){
+  if(count!=0){
+    deleteImages();
+  }
+  // else{
+    // var menu = document.getElementById("numOfImgMenu");
+    // var num = menu.options[menu.selectedIndex].text;
+    // if(num=="Number of Images Displayed"){
+    //   alert("Please select how many images you want displayed.");
+    //   return;
+    // }
+    // var fileName="/Users/msivraj/Documents/imgIndex/"+count+":"+dateTimeval+".txt";
+    for(var i=0;i<numOfDisplayedImgs;i++){
+      count++;
+      var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
+      addImagesToPageOne(srcLoc, count);
+    }
+  // }
+    
+  
+// count+=num;
+  
+}
+
+function loadPreviousImages(){
+  var tempCount=count-=numOfDisplayedImgs;
+  count-=numOfDisplayedImgs;
+  if(count<=0){
+    deleteImages();
+    alert("You cannot go back from image 0!");
+    return;
+  }
+  // else{
+    // var menu = document.getElementById("numOfImgMenu");
+    // var num = menu.options[menu.selectedIndex].text;
+    // if(num=="Number of Images Displayed"){
+    //   alert("Please select how many images you want displayed.");
+    //   return;
+    // }
+    deleteImages();
+    for(count;count<tempCount;count++){
+      var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
+      addImagesToPageOne(srcLoc, count);
+    }
+  // }
+  
+}
+
+function loadIntialImages(items){
   var internalCount=0;
   for (count; count<items.length; count++) {
      if(isImage(items[count])){
-       if(internalCount<10){
-    var f = folder+'/'+items[count];
-    var id="img"+ count;
+       if(internalCount<10){//469 is the last img when iC is 469 c is 470 102 is the number images i want to display
+    var f = imgFolder+'/'+items[count];
+    // var id="img"+ count;
     
     var newImg=document.createElement('img');
     newImg.src=f;
@@ -51,7 +123,10 @@ function displayNextTwoHundredImages(items){
     //PUT THESE BACK IN LINE 19-20
     // document.getElementById(id).classList.add('thumbnail');
     // document.getElementById(id).classList.add(imageCssClass());
-    addImagesToPage(newImg, f, id, count);
+    // addImagesToPage(newImg, f, id, count);
+      addImagesToPage(f, count);
+
+    // getDateandTime(newImg, f, count);
     // var newDiv=document.createElement('div');
     // var imageClass=imageCssClass();
     // newDiv.innerHTML='<img src="'+f+'" class="'+imageCssClass()+' thumbnail"  id="'+id+'" display="inline"/> <p>hello</p>';
@@ -65,11 +140,32 @@ function displayNextTwoHundredImages(items){
   }
    }
    
-   function addImagesToPage(img, path, href, imgNum){
+   function addImagesToPageOne(srcLoc, imgNum){
+     var fs=require('fs-extra');
+     fs.readFile(srcLoc, function(err, items){
+       var path=items;
+       var newSpan=document.createElement('span');
+       newSpan.id='sp'+imgNum; 
+      
+      newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
+      '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
+      '<div class="lightbox-target" id="div'+imgNum+'">' +
+      ' <div id="buttonDiv">' +
+      '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
+      ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
+      '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
+      '<a class="lightbox-close" href="#work"> </a> </div>';
+      
+       document.getElementById('images').appendChild(newSpan);
+     });   
+     
+   }
+   
+   function addImagesToPage(path, imgNum){
+     
      var newSpan=document.createElement('span');
      newSpan.id='sp'+imgNum; 
-    //  <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" />
-
+    
     newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
     '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
     '<div class="lightbox-target" id="div'+imgNum+'">' +
@@ -79,19 +175,8 @@ function displayNextTwoHundredImages(items){
     '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
     '<a class="lightbox-close" href="#work"> </a> </div>';
     
-    // newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'">' +
-    // '<input type="image" class="lazyload thumbnail thumb0" data-src="'+path+'" onclick="displaySavedMemory('+imgNum+');"/></a>' +
-    // '<div class="lightbox-target" id="div'+imgNum+'">' +
-    // ' <div id="buttonDiv">' +
-    // '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-    // ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
-    // '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
-    // '<a class="lightbox-close" href="#work"> </a> </div>';
-    
      document.getElementById('images').appendChild(newSpan);
-     //var imageElement=document.getElementById(id); NOT SURE IF COMMENTING THIS OUT IS THE RIGHT MOVE
-    //  window.onload=getDateandTime;
-     getDateandTime(img, path, imgNum);
+     
    }
    
    function saveMemory(buttonId, imgNum){
@@ -110,13 +195,9 @@ function displayNextTwoHundredImages(items){
      var file='/memory'+imgNumber+'.txt';
      var textBoxId='memory'+imgNumber;
      var filePath= folderLocation + file;
-     var fs = require('fs');
-     
-     
-     
+     var fs = require('fs-extra');
+
      fs.readFile(filePath, function(err, items){
-       
-       //document.write(items);
        document.getElementById(textBoxId).value = items;
      });     
    }
@@ -126,13 +207,19 @@ function displayNextTwoHundredImages(items){
      
    }
    
-   function writeToFile(fileLocation, dataToWrite){
-     var fs=require('fs');
+   function writeToFolder(folderLocation, imgSrc, imgDateTime){
+     var fs=require('fs-extra');
+     var srcLoc=folderLocation+"/src.txt";
+     var imgDateTimeLoc=folderLocation+"/datetime.txt";
     
-     fs.writeFile(fileLocation, dataToWrite, (err) => {
-  if (err) throw err;
-  console.log('The file has been saved!');
-});
+     fs.outputFile(srcLoc, imgSrc, (err) => {
+       if (err) throw err;
+  // console.log('The file has been saved!');
+    });
+
+    fs.outputFile(imgDateTimeLoc, imgDateTime, (err)=>{
+      if(err) throw err;
+    });
    }
    
   //  (function hideSaveButton(buttonId){
@@ -149,14 +236,7 @@ function displayNextTwoHundredImages(items){
    // 
   //      button.addEventListener("click", toggle(), false);
   //  })()
-   
-   //MOM DOES NOT WANT THIS 
-  //  function imageCssClass(){
-  //    var returnVal="thumb";
-  //    var randNum1to10=Math.floor(Math.random()*11);
-  //    returnVal+=randNum1to10;
-  //    return returnVal;
-  //  }
+
 
 function getExtension(filename) {
   if(filename==undefined){
@@ -183,7 +263,7 @@ function isImage(filename) {
     return false;
 }
 
-function getDateandTime(imageElement, path, imgNum) {
+function getDateandTime(imageElement, imgSrc, imgNum) {
   if(imageElement==undefined){
     return;
   }
@@ -191,54 +271,70 @@ function getDateandTime(imageElement, path, imgNum) {
   EXIF.getData(imageElement, function (imageWithData) {
       //document.write(EXIF.pretty(this));
       // document.write(EXIF.getTag(this, "DateTimeOriginal"))
-    var dateTimeval=EXIF.getTag(this, "DateTimeOriginal");
+    var imgDateTime=EXIF.getTag(this, "DateTimeOriginal");
     // var dateTimeSpan=document.createElement("span");
     // dateTimeSpan.innerHTML=dateTimeval;
     // imageElement.appendChild(dateTimeSpan);
-    createIndex(path, dateTimeval, imgNum); //PUT BACK IN THE CREATE INDEX
-    // 
+    // createIndex(path, dateTimeval, imgNum); //PUT BACK IN THE CREATE INDEX
+    var imgFolder="/Users/msivraj/Documents/imgIndex/"+imgNum+"";
+    //THIS METHOD CREATES THE IMG INDEX
+    writeToFolder(imgFolder, imgSrc, imgDateTime);
   });
 
 }
 
-function startApp(){
-  var fs = require('fs');
-  fs.readdir(folder, function(err, items){
+function startApp(isCreateIndex){
+  var fs = require('fs-extra');
+  fs.readdir(imgFolder, function(err, items){
     
     //document.write(items);
-    displayNextTwoHundredImages(items);
-    
-  });
+    if(isCreateIndex){
+      createIndex(items);
+    }
+    else{
+      loadIntialImages(items);
+      
+    }
+      });
 
 }
 
 
 
-function createIndex(path, dateTime, imgNum){
-  //var data=dateTime+"-"+path+"\n";
-  // var emptyFs= require('extfs');
-  // emptyFs.isEmpty('/Users/msivraj/Documents/imgindex.txt', function (empty){
-  //  USE THIS JS PACKAGE TO CHECK IF FILE IS EMPTY 
-  // });
-  var data=imgNum+"-"+dateTime+"-"+path+"\n";
-  // writeToFile(path, data);
-  // addTodo(data);
-  // var fs = require('fs');
-  // fs.appendFile('/Users/msivraj/Documents/imgindex.txt', data, function(err){
-  //   if(err){
-  //     throw err;
-  //   }
-  // });
-  
-}
-
-function clearIndex(){
-  //THIS CODE WORKS BUT ONLY FOR A SINGLE FILE
-  // var fs=require('fs');
-  // fs.truncate('/Users/msivraj/Documents/imgindex.txt', 0, function(){
-  //   
-  // });
-}
+ function createIndex(items){
+   for (var indexCount =0; indexCount<items.length; indexCount++) {
+      if(isImage(items[indexCount])){
+       //  if(internalCount<500){
+     var f = imgFolder+'/'+items[indexCount];
+     //var id="img"+ count;
+     
+     var newImg=document.createElement('img');
+     newImg.src=f;
+     // newImg.id=id;
+     //PUT THESE BACK IN LINE 19-20
+     // document.getElementById(id).classList.add('thumbnail');
+     // document.getElementById(id).classList.add(imageCssClass());
+     getDateandTime(newImg, f, indexCount);
+     // var newDiv=document.createElement('div');
+     // var imageClass=imageCssClass();
+     // newDiv.innerHTML='<img src="'+f+'" class="'+imageCssClass()+' thumbnail"  id="'+id+'" display="inline"/> <p>hello</p>';
+     // document.body.appendChild(newDiv);
+     
+   // }else{
+   //   break;
+   // }
+ }
+   }
+   //console.log(indexCount);
+    }
+// 
+// function clearIndex(){
+//   //THIS CODE WORKS BUT ONLY FOR A SINGLE FILE
+//   var fs=require('fs');
+//   fs.truncate('/Users/msivraj/Documents/imgindex.txt', 0, function(){
+//     
+//   });
+// }
 // 
 // function searchImages(date){
 //   //2006:12:25 09:41:06

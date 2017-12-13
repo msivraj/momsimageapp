@@ -34,17 +34,27 @@
 </div>
    <div  id="images">
    </div>
-   <div id="bottons">
+   <div id="buttons">
     <input id="clickMe" type="button" value="Load More" onclick="startApp();"/>
     <input id="clearIndex" type="button" value="Clear Index" onclick="clearIndex();"/>
-    <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
+    <!-- <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/> -->
     <input id="previouspage" type="button" value="Previous Page" onclick="loadPreviousImages();"/>
-    <input type="button" value="Show Todos" onclick="showTodos();"/>    
+    <input id="createIndex" type="button" value="Create Index" onclick="startApp(true);"/>
+    <input type="button" class="button" id="search" value="Search" onclick="findImages();"/>
   </div>
-  
-  
-  <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" />
 
+<!-- onchange="loadNextImages(); -->
+  <select id="numOfImgMenu">
+  <option selected>Number of Images Displayed</option>
+  <option value="1">10</option>
+  <option value="20">20</option>
+  <option value="30">30</option>
+  <option value="40">40</option>
+  <option value="50">50</option>
+  <option value="100">100</option>
+</select>
+  
+  <!-- <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" /> -->
 
 
   
