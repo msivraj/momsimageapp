@@ -2,7 +2,7 @@ var count=0;
 const imgFolder='/Users/msivraj/Documents/2006_12_25';
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=10;
+var numOfDisplayedImgs=102;
 var PouchDB = require('pouchdb');
 var db = new PouchDB('my_db');
 var remoteCouch=false;
@@ -30,31 +30,9 @@ var remoteCouch=false;
 //   });
 // }
 window.addEventListener("DOMContentLoaded", function(event) {
-  // var newinput=document.createElement("input");
-  // newinput.id="nextpage";
-  // newinput.type="button";
-  // newinput.value="Next Page";
-  // newinput.onclick=loadNextImages;
-  // document.getElementById("buttons").appendChild(newinput);
-  // <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
-
-  loadNextImages();
-  startApp(false);
-    window.setTimeout(function() { lazyload(); }, 200);
+  startApp(3);
+    // window.setTimeout(function() { lazyload(); }, 200);
 });
-
-// function isNumofImgstoDisplayChanged(){
-//   var m = document.getElementById("numOfImgMenu");
-//   var num = menu.options[menu.selectedIndex].text;
-//   
-//   if(imgsToDisplay<num){
-//     
-//   }else if (imgsToDisplay>num) {
-//     
-//   }else{
-//     
-//   }
-// }
 
 function deleteImages(){
   document.getElementById('images').innerHTML="";
@@ -78,6 +56,7 @@ function loadNextImages(){
       var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
       addImagesToPageOne(srcLoc, count);
     }
+    window.setTimeout(function() { lazyload(); }, 200);
   // }
     
   
@@ -283,18 +262,20 @@ function getDateandTime(imageElement, imgSrc, imgNum) {
 
 }
 
-function startApp(isCreateIndex){
+function startApp(whatToDo){
   var fs = require('fs-extra');
   fs.readdir(imgFolder, function(err, items){
     
     //document.write(items);
-    if(isCreateIndex){
+    if(whatToDo==1){
       createIndex(items);
+    }else if(whatToDo==2){
+      searchImages(items);
     }
-    else{
-      loadIntialImages(items);
-      
-    }
+    // else if(whatToDo==3){
+    //   loadIntialImages(items);
+    //   
+    // }
       });
 
 }
@@ -327,32 +308,29 @@ function startApp(isCreateIndex){
    }
    //console.log(indexCount);
     }
-// 
-// function clearIndex(){
-//   //THIS CODE WORKS BUT ONLY FOR A SINGLE FILE
-//   var fs=require('fs');
-//   fs.truncate('/Users/msivraj/Documents/imgindex.txt', 0, function(){
-//     
-//   });
-// }
-// 
-// function searchImages(date){
-//   //2006:12:25 09:41:06
-//   var fs=require('fs');
-//   
-// }
-// 
-// function readYear(){
-//   
-// }
-// 
-// function readMonth(){
-//   
-// }
-// 
-// function readDay(){
-//    
-// }
 
-//make dateTime object that is made up of year day month objects 
-  //class dateTime class year class month class day
+// string.charAt(index) THIS IS HOW TO PARSE A STRING
+function getYear(){
+  var menu = document.getElementById("years");
+  var year = menu.options[menu.selectedIndex].text;
+  return year;
+}
+
+function getMonth(){
+  var menu = document.getElementById("months");
+  var month = menu.options[menu.selectedIndex].text;
+  return month;
+}
+
+function getDay(){
+  var menu = document.getElementById("days");
+  var day = menu.options[menu.selectedIndex].text;
+   return day;
+}
+
+function searchImages(items){
+  var year=getYear();
+  var month=getMonth();
+  var dar=getDay();
+  
+}
