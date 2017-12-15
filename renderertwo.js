@@ -1,8 +1,10 @@
 var count=0;
+var numberOfImages;
+var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
 const imgFolder='/Users/msivraj/Documents/2006_12_25';
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=102;
+var numOfDisplayedImgs=10;
 var PouchDB = require('pouchdb');
 var db = new PouchDB('my_db');
 var remoteCouch=false;
@@ -159,24 +161,27 @@ function loadIntialImages(items){
    }
    
    function saveMemory(buttonId, imgNum){
-     var folderLocation="/Users/msivraj/Documents/memories"
-     var file='/memory'+imgNum+'.txt';
+     var fs=require('fs-extra');
+     var fileLocation="/Users/msivraj/Documents/imgIndex/"+imgNum+"/memory.txt"
+    //  var file='/memory'+imgNum+'.txt';
      var textBoxId='memory'+imgNum;
-     var filePath= folderLocation + file;
-     
-     
+    //  var filePath= folderLocation + file;
      var toWrite=document.getElementById(textBoxId).value;
-     writeToFile(filePath, toWrite);
+     fs.outputFile(fileLocation, toWrite, (err) => {
+       if (err) throw err;
+  // console.log('The file has been saved!');
+    });
+     //writeToFile(filePath, toWrite);
    }
    
-   function displaySavedMemory(imgNumber){
-     var folderLocation="/Users/msivraj/Documents/memories"
-     var file='/memory'+imgNumber+'.txt';
-     var textBoxId='memory'+imgNumber;
-     var filePath= folderLocation + file;
+   function displaySavedMemory(imgNum){
+     var fileLocation="/Users/msivraj/Documents/imgIndex/"+imgNum+"/memory.txt"
+    //  var file='/memory'+imgNumber+'.txt';
+     var textBoxId='memory'+imgNum;
+    //  var filePath= folderLocation + file;
      var fs = require('fs-extra');
 
-     fs.readFile(filePath, function(err, items){
+     fs.readFile(fileLocation, function(err, items){
        document.getElementById(textBoxId).value = items;
      });     
    }
@@ -185,6 +190,7 @@ function loadIntialImages(items){
      
      
    }
+   
    
    function writeToFolder(folderLocation, imgSrc, imgDateTime){
      var fs=require('fs-extra');
@@ -268,7 +274,13 @@ function startApp(whatToDo){
     
     //document.write(items);
     if(whatToDo==1){
-      createIndex(items);
+      var nonImgCount=createIndex(items);
+      numberOfImages=items.length-nonImgCount;
+      var nOIPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
+      fs.outputFile(nOIPath, numberOfImages, (err) => {
+        if (err) throw err;
+   // console.log('The file has been saved!');
+     });
     }else if(whatToDo==2){
       searchImages(items);
     }
@@ -283,8 +295,12 @@ function startApp(whatToDo){
 
 
  function createIndex(items){
+   var nonImageCount=0;
    for (var indexCount =0; indexCount<items.length; indexCount++) {
-      if(isImage(items[indexCount])){
+      if(!isImage(items[indexCount])){
+        nonImageCount++;
+        // indexCount--;
+      }else{
        //  if(internalCount<500){
      var f = imgFolder+'/'+items[indexCount];
      //var id="img"+ count;
@@ -307,9 +323,10 @@ function startApp(whatToDo){
  }
    }
    //console.log(indexCount);
+   return nonImageCount;
     }
 
-// string.charAt(index) THIS IS HOW TO PARSE A STRING
+
 function getYear(){
   var menu = document.getElementById("years");
   var year = menu.options[menu.selectedIndex].text;
@@ -329,8 +346,81 @@ function getDay(){
 }
 
 function searchImages(items){
+  deleteImages();
   var year=getYear();
   var month=getMonth();
-  var dar=getDay();
+  var day=getDay();
+  var dataTimeStr;
+  var fs=require('fs-extra');
+  var strNumberOfImages=fs.readFileSync(numberOfImagesPath);
+  numberOfImages=parseInt(strNumberOfImages,10);
+  // fs.readFile(numberOfImagesPath, function(err, items){
+  //   numberOfImages=items;
+    for(var i=0;i<numberOfImages;i++){
+      var dateTimePath="/Users/msivraj/Documents/imgIndex/"+i+"/datetime.txt";
+      var srcPath="Users/msivraj/Documents/imgIndex/"+i+"/src.txt"
+      fs.readFile(dateTimePath, 'utf8', function(err, items){
+        dateTimeStr=items;
+        if(items!=undefined){
+          var isExist=parseYear(day, month, year, dateTimeStr);
+          if(isExist){
+            addImagesToPageOne(fs.readFileSync(srcPath, 'utf8'), i);
+          }
+        
+        }
+      });       
+    }
+  // }); 
   
+}
+
+function parseYear(day, month, year, dateTime){
+  var yearComp="";
+  var index=0;
+  for(index;index<dateTime.length;index++){
+    if(dateTime[index]==":"){
+      break;
+    }
+    // console.log(dateTime[i]);
+     yearComp+=dateTime[index];
+  }
+  if(yearComp===year){
+    
+    return parseMonth(day, month, dateTime, index+1);
+  }else{
+    return false;
+  }
+  
+}
+
+function parseMonth(day, month, dateTime, index){
+  var monthComp="";
+  for(index;index<dateTime.length;index++){
+    if(dateTime[index]==":"){
+      break;
+    }
+    // console.log(dateTime[i]);
+     monthComp+=dateTime[index];
+  }if(monthComp===month){
+    
+    return parseDay(day, dathTime, index+1);
+  }else{
+    return false;
+  }
+}
+
+function parseDay(day, dateTime, index){
+  var dayComp="";
+  for(index;index<dateTime.length;index++){
+    if(dateTime[index]==" "){
+      break;
+    }
+    // console.log(dateTime[i]);
+     dayComp+=dateTime[index];
+  }
+  if(dayComp===day){
+    return true;
+  }else{
+    return false;
+  }
 }
