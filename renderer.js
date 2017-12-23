@@ -22,7 +22,11 @@
 // var replaced = str.replace(/ /g, "/");    
 // alert(replaced);
 
-for(var i=0;i<1000;i++){
-  var randNum=Math.floor(Math.random() * 12)+1;
-  console.log(randNum);
-}
+// for(var i=0;i<1000;i++){
+//   var randNum=Math.floor(Math.random() * 12)+1;
+//   console.log(randNum);
+// }
+
+var date= new Date(1289804400000);
+var year=date.getFullYear();
+

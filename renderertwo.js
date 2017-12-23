@@ -1,10 +1,10 @@
 //785055600000
 // /Users/msivraj/Documents/imgs/2011-09-22/fast photos.jpg
-// randYear = 1994
+// randYear = 2010
 // 
 // randMonth = 10
 // 
-// randDay = 17
+// randDay = 15
 
 
 var numberOfIndexs=0;
@@ -479,7 +479,7 @@ function searchImages(){
 }
 
 function parseDate(dayIn, monthIn, yearIn, dateIn){
-  if(dateIn==946710000000){
+  if(dateIn==1289804400000){
     console.log("error here");
   }
   var date= new Date(dateIn);
@@ -574,7 +574,7 @@ function parseMonth(day, month, dateTime){
 }
 
 function parseDay(day, dateTime, index){
-  var dayComp=dateTime.getDay();
+  var dayComp=dateTime.getDate();
   // for(index;index<dateTime.length;index++){
   //   if(dateTime[index]==" "){
   //     break;
