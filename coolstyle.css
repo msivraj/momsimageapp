@@ -1,16 +1,17 @@
 .thumb0 {
-    height: 100px;
-    /*margin: 50px 30px 0 0; /*spacing around the image*/
-    width: 150px;
-    /*position: relative;*/
-    display: inline-block;
-    margin-top: 10px;
-    margin-left: 0px;
-    margin-right: 25px;
-    margin-bottom: 10px;
+    height: inherit;
+    width: 15%;
+    position: relative;
+    /*display: block;*/
+    object-fit: contain;
+    /*margin: auto;*/
+    margin-top: 3px;
+    margin-left: 3px;
+    /*margin-right: 3px;*/
+    margin-bottom: 3px;
     /*margin: 30px 20px 20px 100px;*/
-    position:relative;
-    z-index: 1;
+    /*position:relative;*/
+    /*z-index: 1;*/
   }
   
   .thumbnail:hover{
@@ -24,52 +25,7 @@
     -webkit-transition: all 0.3s;
   }
   
-  .dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #f1f1f1}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-}
-  
+    
   #clickMe{
     /*position: fixed;*/
     /*left:0%;*/
@@ -84,44 +40,48 @@
   
   #images{
     position:relative;
-    overflow: visible;
-    width: 1200px;
+    /*overflow: visible;*/
+    width: 130vh;
+    height: auto;
+    align-items: center;
     margin: auto;
-    margin-left:10.45%;
+  text-align: center;
+    /*margin-left:10.45%;*/
+    /*left:13.2%;*/
     
   }
   
+  #buttons{
+    /*position: relative;*/
+  }
+  
+  #searchMenus{
+    /*position: relative;*/
+  }
+  
   #familyQuote{
-    /*position: fixed;*/
-    /*z-index: 1:*/
+    position: relative;
   }
   
   #quote1{
-    font-size: 2.5em;
+    font-size: 3em;
+    text-align: center;
+    font-variant: small-caps;
     /*font-family:inherit;*/
   }
+  
+  #quote2{
+    text-align: center;
+    font-variant: small-caps;
+    font-size: 1.5em;
+    }
   
   #memorySave{
     position: relative;
     z-index: 3;
   }
   
-  /*#memoryLable{
-    position: relative;
-    z-index: 3;
-  }*/
-  /*#memoryButton{
-  display: none;
-}*/
-/*#memorySpan{
-  position: fixed;
-  left: 65%;
-  -webkit-appearance: button;
-  /*padding: 2px;*/
-/*}
-#memoryButton:not(:checked) + textarea{
-  display:none;
-}*/
+  
 .textbox{
   position: relative;
   top:90.5%;
@@ -129,18 +89,7 @@
   z-index: 3;
   
 }
-
-#add{
-  position: relative;
-  z-index: 3;
-}
   
-.showButon{
-    background:url('http://spacetelescope.github.io/understanding-json-schema/_static/pass.png');
-    background-repeat:repeat-y;
-    height:30px;
-    text-indent:20px;
-}
 #myDiv{
   
 }
@@ -156,17 +105,6 @@ display:none;
 .show{
 display:block;
 }
-  /*Eliminates padding, centers the thumbnail */
-/* Styles the thumbnail */
-
-/*a.lightbox img {
-height: 150px;
-border: 3px solid white;
-box-shadow: 0px 0px 8px rgba(0,0,0,.3);
-margin: 94px 20px 20px 20px;
-}*/
-
-/* Styles the lightbox, removes it from sight and adds the fade-in transition */
 
 .lightbox-target {
 position: fixed;
@@ -202,25 +140,6 @@ box-sizing: border-box;
 -o-transition: .5s ease-in-out;
 transition: .5s ease-in-out;
 }
-
-/* Styles the close link, adds the slide down transition */
-
-/*a.lightbox-close {
-display: block;
-width:50px;
-height:50px;
-box-sizing: border-box;
-background: white;
-color: black;
-text-decoration: none;
-position: absolute;
-top: -80px;
-right: 0;
--webkit-transition: .5s ease-in-out;
--moz-transition: .5s ease-in-out;
--o-transition: .5s ease-in-out;
-transition: .5s ease-in-out;
-}*/
 
 /* Provides part of the "X" to eliminate an image from the close link */
 
