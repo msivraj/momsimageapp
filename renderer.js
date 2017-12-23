@@ -16,8 +16,13 @@
 // how to read file
     // var jsonDataFromFile=fs.readFileSync("pathToJpgJsonData")
     // var myArr=JSON.parse(jsonDataFromFile);
-var str="/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1";    
-var replaced = str.replace(/ /g, "/");    
-alert(replaced);
+    
+    
+// var str="/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1";    
+// var replaced = str.replace(/ /g, "/");    
+// alert(replaced);
 
-
+for(var i=0;i<1000;i++){
+  var randNum=Math.floor(Math.random() * 12)+1;
+  console.log(randNum);
+}

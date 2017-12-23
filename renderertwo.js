@@ -1,5 +1,12 @@
-//946710000000
-///Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/kelidascope 4.jpg
+//785055600000
+// /Users/msivraj/Documents/imgs/2011-09-22/fast photos.jpg
+// randYear = 1994
+// 
+// randMonth = 10
+// 
+// randDay = 17
+
+
 var numberOfIndexs=0;
 var numberOfImages=0;
 var jpgDataArr=[];
@@ -222,6 +229,11 @@ function loadIntialImages(items){
      
    }
    
+   function generateRandomDate(seed, adder){
+     var randNum=Math.floor(Math.random() * seed)+adder;
+     return randNum;
+   }
+   
    function createDataArray(imgSrc, imgDateTime){
     //  var fs=require('fs-extra');
     //  var srcLoc=generateIndexLoc()+"/src.txt";
@@ -240,7 +252,11 @@ function loadIntialImages(items){
     var jpgData={};
     if(imgDateTime==undefined){
       //PUT LOGIC HERE TO RANDOMIZE DATE THAT IS ENTERED FOR IMAGES WITHOUT DATE
-      jpgData.date=new Date(2000,0,1).getTime();
+      var randYear=generateRandomDate(46,1994);
+      var randMonth=generateRandomDate(12,1);
+      var randDay=generateRandomDate(28,1);
+      // jpgData.date=new Date(2000,0,1).getTime();
+      jpgData.date=new Date(randYear,randMonth,randDay).getTime();
       jpgData.src=imgSrc;
     }else{
       // var dateTime="2007:06:13 09:33:56";
@@ -438,6 +454,7 @@ function readDay(){
 }
 
 function searchImages(){
+  deleteImages();
   var year=readYear();
   var month=readMonth();
   var day=readDay();
