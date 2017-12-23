@@ -5,7 +5,7 @@
 // randMonth = 10
 // 
 // randDay = 15
-
+//ADD A GOTO PAGE BUTTON
 
 var numberOfIndexs=0;
 var numberOfImages=0;
@@ -25,26 +25,7 @@ var remoteCouch=false;
 // const fs = require('fs-extra')
 
 
-// this is all for pouchdb
-// function addTodo(text){
-//   var todo={
-//     _id:new Date().toISOString(),
-//     title: text,
-//     completed: false
-//   };
-//   
-//   db.put(todo, function callback(err, result){
-//     if(!err){
-//       console.log('Successfully posted a todo!');
-//     }
-//   });
-// }
-// 
-// function showTodos(){
-//   db.allDocs({include_docs:true,descending:true}, function(err,doc){
-//     redrawTodosUI(doc.rows);
-//   });
-// }
+
 window.addEventListener("DOMContentLoaded", function(event) {
   startApp(3);
     // window.setTimeout(function() { lazyload(); }, 200);
@@ -384,10 +365,13 @@ function startApp(whatToDo){
     //   fs.outputFile(nOIPath, numberOfImages, (err) => {
     //     if (err) throw err;
     //  });
-    // }
-    // else if(whatToDo==2){
-    //   searchImages(items);
-    // }
+    }
+    else if(whatToDo==2){
+      var fs=require('fs-extra');
+      var content=fs.readFileSync(indexLoc, 'utf8');
+      jpgDataArr=JSON.parse(content);
+      searchImages();
+    }
     // else if(whatToDo==3){
     //   loadIntialImages(items);
     //   
@@ -395,7 +379,7 @@ function startApp(whatToDo){
       // });
 
 }
-}
+//}
 
 function recurseDirs(nextDir){
   // var imgCount=imgCountIn;
@@ -458,10 +442,10 @@ function searchImages(){
   var year=readYear();
   var month=readMonth();
   var day=readDay();
-  var fs=require('fs-extra');
-  fs.readFile(indexLoc, 'utf8', function(err, items){
+  
+  // fs.readFile(indexLoc, 'utf8', function(err, items){
   // var content=fs.readFileSync(indexLoc, 'utf8');
-    jpgDataArr=JSON.parse(items);
+    // jpgDataArr=JSON.parse(items);
     // console.log("date:", jpgDataArr.date);
     for(var i=0;i<jpgDataArr.length;i++){
       
@@ -474,8 +458,8 @@ function searchImages(){
         addImagesToPageOne(src, i);
       }
     }
-  });
-  window.setTimeout(function() { lazyload(); }, 500);
+  // });
+  window.setTimeout(function() { lazyload(); }, 200);
 }
 
 function parseDate(dayIn, monthIn, yearIn, dateIn){
