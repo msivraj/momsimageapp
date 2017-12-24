@@ -9,7 +9,7 @@
 
 var numberOfIndexs=0;
 var numberOfImages=0;
-var count=0;
+var count=1;
 var indexTxtData={};
 indexTxtData.jpgDataArr=[];
 var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
@@ -54,10 +54,12 @@ function loadNextImages(){
       
       // var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
       // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
-      var src=indexTxtData.jpgDataArr[i].src;
-      count++;
+      
+      var src=indexTxtData.jpgDataArr[count].src;
+      
       // if(fs.existsSync(srcLoc)){
         addImagesToPageOne(src, count);
+        count++;
       // }
       // else{
       //   i--;
@@ -76,10 +78,26 @@ function loadNextImages(){
 function loadPreviousImages(){
   var tempCount=count-=numOfDisplayedImgs;
   count-=numOfDisplayedImgs;
+
   if(count<=0){
     deleteImages();
     alert("You cannot go back from image 0!");
+    count=1;
     return;
+  }else if(tempCount==73){
+    deleteImages();
+    for(count;count<tempCount;count++){
+      var src=indexTxtData.jpgDataArr[count].src;
+      addImagesToPageOne(src, count);
+    }
+    
+  }else{
+    deleteImages();
+    for(count;count<tempCount;count++){
+      // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
+      var src=indexTxtData.jpgDataArr[count].src;
+      addImagesToPageOne(src, count);
+    }
   }
   // else{
     // var menu = document.getElementById("numOfImgMenu");
@@ -88,12 +106,9 @@ function loadPreviousImages(){
     //   alert("Please select how many images you want displayed.");
     //   return;
     // }
-    deleteImages();
-    for(count;count<tempCount;count++){
-      var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
-      addImagesToPageOne(srcLoc, count);
-    }
+    
   // }
+  window.setTimeout(function() { lazyload(); }, 500);
   
 }
 
@@ -241,12 +256,17 @@ function loadIntialImages(items){
     var jpgData={};
     if(imgDateTime==undefined){
       //PUT LOGIC HERE TO RANDOMIZE DATE THAT IS ENTERED FOR IMAGES WITHOUT DATE
-      var randYear=generateRandomDate(46,1994);
-      var randMonth=generateRandomDate(12,1);
-      var randDay=generateRandomDate(28,1);
-      // jpgData.date=new Date(2000,0,1).getTime();
-      jpgData.date=new Date(randYear,randMonth,randDay).getTime();
+      // var randYear=generateRandomDate(46,1994);
+      // var randMonth=generateRandomDate(12,1);
+      // var randDay=generateRandomDate(28,1);
+      // // jpgData.date=new Date(2000,0,1).getTime();
+      // jpgData.date=new Date(randYear,randMonth,randDay).getTime();
+      // jpgData.src=imgSrc;
+      var fs=require('fs-extra');
+      // var date=new Date(fs.statSync(imgSrc).birthtime.getTime());
       jpgData.src=imgSrc;
+      jpgData.date=new Date(fs.statSync(imgSrc).birthtime).getTime();
+      
     }else{
       // var dateTime="2007:06:13 09:33:56";
       var pieces=imgDateTime.split(" ");
@@ -309,11 +329,11 @@ function isImage(filename) {
     var ext = getExtension(filename);
     switch (ext.toLowerCase()) {
     case 'jpg':
-    // case 'gif':
-    // case 'bmp':
-    // case 'png':
-    // case 'tiff':
-        //etc
+    case 'gif':
+    case 'bmp':
+    case 'png':
+    case 'tiff':
+        // etc
         return true;
     }
     return false;
@@ -339,6 +359,8 @@ function getDateandTime(imgSrc) {
   //   writeToFolder(imgSrc, imgDateTime);
   // });
   var ExifImage = require('kinda-exif').ExifImage;
+  // var isGo=true;
+  try{
   var image = new ExifImage({
     // image: pathModule.join(__dirname, 'space-invader.jpg')
     // image: (imgSrc.replace(/ /g, '/'))
@@ -347,9 +369,16 @@ function getDateandTime(imgSrc) {
   });
   
   var imgDateTime=image.exifData.exif.DateTimeOriginal;
+  //LEAVING LINE 373 IN WILL MAKE IT SO THAT ONLY JPGS ARE DISPLAYED.
+  // createDataArray(imgSrc, imgDateTime);
+}
+catch(err){
+  console.log("ERROR"+imgSrc+imgDateTime);
+   return;
+}
   // var imgFolder=appDir+"/imgIndex/"+imgNum;
-  
   //THIS METHOD CREATES THE IMG INDEX
+  //LEAVING LINE 381 AND 376 IN WILL ALLOW FOR ALL IMG TYPES TO BE DISPLAYED EVEN CORRUPTED ONES
   createDataArray(imgSrc, imgDateTime);
 }
 
