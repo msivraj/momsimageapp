@@ -20,9 +20,6 @@ const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
 var numOfDisplayedImgs=72;
-var PouchDB = require('pouchdb');
-var db = new PouchDB('my_db');
-var remoteCouch=false;
 // const fs = require('fs-extra')
 
 
