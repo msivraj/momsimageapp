@@ -9,6 +9,7 @@
 
 var numberOfIndexs=0;
 var numberOfImages=0;
+var count=0;
 var jpgDataArr=[];
 var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
 var path = require('path');
@@ -49,7 +50,7 @@ function loadNextImages(){
     //   return;
     // }
     // var fileName="/Users/msivraj/Documents/imgIndex/"+count+":"+dateTimeval+".txt";
-    for(var i=0;i<numOfDisplayedImgs;i++){
+    for(var i=0;i<jpgDataArr.length;i++){
       
       // var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
       var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
@@ -167,7 +168,9 @@ function loadIntialImages(items){
    
    function saveMemory(buttonId, imgNum){
      var fs=require('fs-extra');
-     var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
+     //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
+     var image=document.getElementById("img"+imgNum+"")
+     var fileLocation=image.src+".memory.txt"
     //  var file='/memory'+imgNum+'.txt';
      var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
@@ -180,8 +183,10 @@ function loadIntialImages(items){
    }
    
    function displaySavedMemory(imgNum){
-     var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
+    //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
     //  var file='/memory'+imgNumber+'.txt';
+    var image=document.getElementById("img"+imgNum+"")
+    var fileLocation=image.src+".memory.txt"
      var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
      var fs = require('fs-extra');
@@ -367,15 +372,20 @@ function startApp(whatToDo){
     //  });
     }
     else if(whatToDo==2){
-      var fs=require('fs-extra');
-      var content=fs.readFileSync(indexLoc, 'utf8');
-      jpgDataArr=JSON.parse(content);
+      // var fs=require('fs-extra');
+      // var content=fs.readFileSync(indexLoc, 'utf8');
+      // jpgDataArr=JSON.parse(content);
       searchImages();
     }
-    // else if(whatToDo==3){
-    //   loadIntialImages(items);
-    //   
-    // }
+    else if(whatToDo==3){
+      // loadIntialImages(items);
+      var fs=require('fs-extra');
+      var content=fs.readFile(indexLoc, 'utf8', function(err, content){
+        jpgDataArr=JSON.parse(content);
+      });
+       console.log("finished");
+      
+    }
       // });
 
 }
