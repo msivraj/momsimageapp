@@ -10,7 +10,8 @@
 var numberOfIndexs=0;
 var numberOfImages=0;
 var count=0;
-var jpgDataArr=[];
+var indexTxtData={};
+indexTxtData.jpgDataArr=[];
 var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
 var path = require('path');
 var appDir = path.dirname(require.main.filename);//"/Users/msivraj/IdeaProjects/HTMLCSSJSProjects/momsimageapp"
@@ -28,6 +29,8 @@ window.addEventListener("DOMContentLoaded", function(event) {
   startApp(3);
     // window.setTimeout(function() { lazyload(); }, 200);
 });
+
+
 
 function deleteImages(){
   document.getElementById('images').innerHTML="";
@@ -47,16 +50,19 @@ function loadNextImages(){
     //   return;
     // }
     // var fileName="/Users/msivraj/Documents/imgIndex/"+count+":"+dateTimeval+".txt";
-    for(var i=0;i<jpgDataArr.length;i++){
+    for(var i=0;i<numOfDisplayedImgs;i++){
       
       // var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
-      var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
-      if(fs.existsSync(srcLoc)){
-        addImagesToPageOne(srcLoc, count);
-      }else{
-        i--;
-      }
+      // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
+      var src=indexTxtData.jpgDataArr[i].src;
       count++;
+      // if(fs.existsSync(srcLoc)){
+        addImagesToPageOne(src, count);
+      // }
+      // else{
+      //   i--;
+      // }
+      
     
     }
     window.setTimeout(function() { lazyload(); }, 500);
@@ -250,7 +256,7 @@ function loadIntialImages(items){
       jpgData.date=new Date(jpgDate[0], month, jpgDate[2]).getTime();
       jpgData.src=imgSrc;
     }
-    jpgDataArr.push(jpgData);
+    indexTxtData.jpgDataArr.push(jpgData);
     console.log(numberOfImages+" :: "+JSON.stringify(jpgData));
     // }
     
@@ -262,7 +268,7 @@ function loadIntialImages(items){
 
     appDir+"/index.txt",
 
-    JSON.stringify(jpgDataArr),
+    JSON.stringify(indexTxtData),
 
     function (err) {
         if (err) {
@@ -378,7 +384,7 @@ function startApp(whatToDo){
       // loadIntialImages(items);
       var fs=require('fs-extra');
       var content=fs.readFile(indexLoc, 'utf8', function(err, content){
-        jpgDataArr=JSON.parse(content);
+        indexTxtData=JSON.parse(content);
       });
        console.log("finished");
       
@@ -454,10 +460,10 @@ function searchImages(){
   // var content=fs.readFileSync(indexLoc, 'utf8');
     // jpgDataArr=JSON.parse(items);
     // console.log("date:", jpgDataArr.date);
-    for(var i=0;i<jpgDataArr.length;i++){
+    for(var i=0;i<indexTxtData.jpgDataArr.length;i++){
       
-      var date=jpgDataArr[i].date;
-      var src=jpgDataArr[i].src;
+      var date=indexTxtData.jpgDataArr[i].date;
+      var src=indexTxtData.jpgDataArr[i].src;
       
       
       var isExist=parseDate(day, month, year, date);
