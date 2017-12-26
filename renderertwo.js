@@ -22,7 +22,7 @@ var indexLoc=appDir+"/index.txt";
 const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=72;
+var numOfDisplayedImgs=98;
 // const fs = require('fs-extra')
 
 
