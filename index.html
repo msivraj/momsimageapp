@@ -144,9 +144,18 @@
   <option value="30">30</option>
   <option value="31">31</option>
 </select>
-<input type="button" class="button" id="search" value="Search" onclick="startApp(2);"/>
+<!-- <input id="search" type="button" value="Clear Index" onclick="clearIndex();"/> -->
+
+<input type="button" id="search" value="Search" onclick="startApp(2);"/>
 
 
+</div>
+
+<div id="searchButtons">
+  <input type="button" id="searchButton" value="Clear Search" onclick="clearSearch();"/>
+  <input type="button" id="searchButton" value="Next Page" onclick="nextSearchImgs();"/>
+  <input type="button" id="searchButton" value="Previous Page" onclick="previousSearchImgs();"/>
+  
 </div>
   
   <!-- <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" /> -->

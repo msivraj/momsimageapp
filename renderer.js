@@ -27,6 +27,50 @@
 //   console.log(randNum);
 // }
 
-var date= new Date(1289804400000);
-var year=date.getFullYear();
+// var date= new Date(1289804400000);
+// var year=date.getFullYear();
 
+// var fs=require('fs-extra');
+// var date=fs.statSync("/Users/msivraj/Documents/imgs/2006_12_16/img_0002.jpg").birthtime.getTime();
+// var dateOne=new Date(fs.statSync("/Users/msivraj/Documents/imgs/2006_12_16/img_0002.jpg").birthtime).getTime();
+// console.log(date);
+if(isImage("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")){
+try {
+  var ExifImage = require('kinda-exif').ExifImage;
+  var image = new ExifImage({
+    // image: pathModule.join(__dirname, 'space-invader.jpg')
+    // image: (imgSrc.replace(/ /g, '/'))
+    image: ("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")
+  });
+  
+  var imgDateTime=image.exifData.exif.DateTimeOriginal;
+}
+catch(err) {
+  console.log(err)
+}
+}
+
+function getExtension(filename) {
+  if(filename==undefined){
+    return;
+  }
+    var parts = filename.split('.');
+    return parts[parts.length - 1];
+}
+
+function isImage(filename) {
+  if(filename==undefined){
+    return;
+  }
+    var ext = getExtension(filename);
+    switch (ext.toLowerCase()) {
+    case 'jpg':
+    case 'gif':
+    case 'bmp':
+    case 'png':
+    case 'tiff':
+        // etc
+        return true;
+    }
+    return false;
+}

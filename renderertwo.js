@@ -9,9 +9,11 @@
 
 var numberOfIndexs=0;
 var numberOfImages=0;
-var count=1;
+var count=0;
+var searchCount=0;
 var indexTxtData={};
 indexTxtData.jpgDataArr=[];
+var searchImgs=[];
 var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
 var path = require('path');
 var appDir = path.dirname(require.main.filename);//"/Users/msivraj/IdeaProjects/HTMLCSSJSProjects/momsimageapp"
@@ -37,8 +39,13 @@ function deleteImages(){
 
 }
 
+function clearIndex(){
+  var fs = require('fs');
+fs.truncate(indexLoc, 0, function(){console.log('done')});
+}
+
 function loadNextImages(){
-  var fs=require('fs-extra');
+  // var fs=require('fs-extra');
   if(count!=0){
     deleteImages();
   }
@@ -78,20 +85,28 @@ function loadNextImages(){
 function loadPreviousImages(){
   var tempCount=count-=numOfDisplayedImgs;
   count-=numOfDisplayedImgs;
-
-  if(count<=0){
+  
+  if(count<0){
     deleteImages();
     alert("You cannot go back from image 0!");
-    count=1;
+    count=0;
     return;
-  }else if(tempCount==73){
+  }
+  else if(count==0){
     deleteImages();
     for(count;count<tempCount;count++){
       var src=indexTxtData.jpgDataArr[count].src;
       addImagesToPageOne(src, count);
     }
-    
-  }else{
+  }
+  // else if(tempCount==73){
+  //   deleteImages();
+  //   for(count;count<tempCount;count++){
+  //     var src=indexTxtData.jpgDataArr[count].src;
+  //     addImagesToPageOne(src, count);
+  //   }
+  // }
+  else{
     deleteImages();
     for(count;count<tempCount;count++){
       // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
@@ -166,21 +181,92 @@ function loadIntialImages(items){
 
    }
    
-   function addImagesToPage(path, imgNum){
+   function nextSearchImgs(){
+     if(searchCount!=0){
+    deleteImages();
+  }
+     for(var i=0;i<numOfDisplayedImgs;i++){
+       
+       var src=searchImgs[searchCount].src;
+       var imgNum=searchImgs[searchCount].imgNum;
+         addImagesToPageOne(src, imgNum);
+         searchCount++;
+     }
+     window.setTimeout(function() { lazyload(); }, 200);
+   }
+   
+   function previousSearchImgs(){
+  var tempCount=searchCount-=numOfDisplayedImgs;
+  searchCount-=numOfDisplayedImgs;
+  
+
+  if(searchCount<0){
+    deleteImages();
+    alert("You cannot go back from image 0!");
+    searchCount=0;
+    return;
+  }else if(searchCount==0){
+    deleteImages();
+    for(searchCount;searchCount<tempCount;searchCount++){
+      var src=searchImgs[searchCount].src;
+      var imgNum=searchImgs[searchCount].imgNum;
+      addImagesToPageOne(src, imgNum);
+    }
+  }
+  
+  else if(tempCount==73){
+    deleteImages();
+    for(searchCount;searchCount<tempCount;searchCount++){
+      var src=searchImgs[searchCount].src;
+      var imgNum=searchImgs[searchCount].imgNum;
+      // var src=indexTxtData.jpgDataArr[searchCount].src;
+      addImagesToPageOne(src, imgNum);
+    }
+    
+  }else{
+    deleteImages();
+    for(searchCount;searchCount<tempCount;searchCount++){
+      var src=searchImgs[searchCount].src;
+      var imgNum=searchImgs[searchCount].imgNum;
+      // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
+      // var src=indexTxtData.jpgDataArr[searchCount].src;
+      addImagesToPageOne(src, imgNum);
+    }
+  }
+  // else{
+    // var menu = document.getElementById("numOfImgMenu");
+    // var num = menu.options[menu.selectedIndex].text;
+    // if(num=="Number of Images Displayed"){
+    //   alert("Please select how many images you want displayed.");
+    //   return;
+    // }
+    
+  // }
+  window.setTimeout(function() { lazyload(); }, 500);
+  
+}
+   
+   function addImagesToPage(arrOfImgs){
      
-     var newSpan=document.createElement('span');
-     newSpan.id='sp'+imgNum; 
-    
-    newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
-    '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
-    '<div class="lightbox-target" id="div'+imgNum+'">' +
-    ' <div id="buttonDiv">' +
-    '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-    ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
-    '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
-    '<a class="lightbox-close" href="#work"> </a> </div>';
-    
-     document.getElementById('images').appendChild(newSpan);
+     for(var i=0;i<arrOfImgs.length; i++){
+       var src=arrOfImgs[i].src;
+       var imgNum=arrOfImgs[i].imgNum;
+       var newSpan=document.createElement('span');
+       newSpan.id='sp'+imgNum; 
+      
+      newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
+      '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
+      '<div class="lightbox-target" id="div'+imgNum+'">' +
+      ' <div id="buttonDiv">' +
+      '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
+      ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
+      '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
+      '<a class="lightbox-close" href="#work"> </a> </div>';
+      
+       document.getElementById('images').appendChild(newSpan);
+     }
+     
+     
      
    }
    
@@ -412,16 +498,34 @@ function startApp(whatToDo){
     else if(whatToDo==3){
       // loadIntialImages(items);
       var fs=require('fs-extra');
+      var exfs = require('extfs');
+      if(exfs.isEmptySync(indexLoc)){
+        console.log(indexTxtData.jpgDataArr.length);
+        
+          alert("Please click create index button.");
+          return;
+      }
       var content=fs.readFile(indexLoc, 'utf8', function(err, content){
-        indexTxtData=JSON.parse(content);
+        // try{
+          indexTxtData=JSON.parse(content);
+        // }catch(err){
+        //   alert("Please click create index button.")
+        // }
+        
+        
       });
+      // console.log(indexTxtData.jpgDataArr.length);
+      // if(indexTxtData.jpgDataArr.length==0){
+      //   alert("Please click create index button.");
+      //   return;
+      // }
        console.log("finished");
-      
     }
       // });
 
 }
 //}
+
 
 function recurseDirs(nextDir){
   // var imgCount=imgCountIn;
@@ -478,12 +582,29 @@ function readDay(){
   var day = menu.options[menu.selectedIndex].text;
    return day;
 }
+function clearSearch(){
+  searchCount=0;
+  searchImgs=[];
+  document.getElementById("buttons").style.display="";
+  document.getElementById("searchMenus").style.display="";
+  document.getElementById("searchButtons").style.display="none";
+  deleteImages();
+}
 
 function searchImages(){
+  searchCount=0;
+  var countHere=1;
   deleteImages();
+  document.getElementById("buttons").style.display="none";
+  document.getElementById("searchMenus").style.display="none";
+  document.getElementById("searchButtons").style.display="inline";
+  // document.getElementById("searchButtons").innerHTML=  '<input type="button" class="searchButtons" id="search" value="Clear Search" onclick="clearSearch();"/>'+
+  // '<input type="button" class="searchButtons" id="search" value="Next Page" onclick="clearSearch();"/>'+
+  // '<input type="button" class="searchButtons" id="search" value="Previous Page" onclick="clearSearch();"/>';
   var year=readYear();
   var month=readMonth();
   var day=readDay();
+  // var arrOfImgs=[];
   
   // fs.readFile(indexLoc, 'utf8', function(err, items){
   // var content=fs.readFileSync(indexLoc, 'utf8');
@@ -497,11 +618,22 @@ function searchImages(){
       
       var isExist=parseDate(day, month, year, date);
       if(isExist){
-        addImagesToPageOne(src, i);
+        if(countHere==1592){
+          console.log("error");
+        }
+        var imgObj={};
+        imgObj.src=src;
+        console.log(src+":"+countHere);
+        imgObj.imgNum=i;
+        searchImgs.push(imgObj);
+        countHere++;
+        // addImagesToPageOne();
       }
     }
   // });
-  window.setTimeout(function() { lazyload(); }, 200);
+  // addImagesToPageOne(arrOfImgs);
+  nextSearchImgs();
+  // window.setTimeout(function() { lazyload(); }, 200);
 }
 
 function parseDate(dayIn, monthIn, yearIn, dateIn){
@@ -509,6 +641,7 @@ function parseDate(dayIn, monthIn, yearIn, dateIn){
     console.log("error here");
   }
   var date= new Date(dateIn);
+  // console.log(date.getFullYear()+":",date.getMonth()+":",date.getDate()+":",date);
   // var day=date.getDay();
   // var month=date.getMonth();
   // var year=date.getFullYear();
@@ -557,8 +690,11 @@ function parseDate(dayIn, monthIn, yearIn, dateIn){
 // 
 function parseYear(day, month, year, dateTime){
   var yearComp=dateTime.getFullYear();
-  numberOfImages++;
-  console.log(numberOfImages);
+  // numberOfImages++;
+  // console.log(numberOfImages);
+  // if(yearComp==2010){
+  //   console.log("here");
+  // }
   // var index=0;
   // for(index;index<dateTime.length;index++){
   //   if(dateTime[index]==":"){
@@ -567,10 +703,10 @@ function parseYear(day, month, year, dateTime){
   //   // console.log(dateTime[i]);
   //    yearComp+=dateTime[index];
   // }
-  if(yearComp==year&&month!="Month"){
+  if(yearComp==parseInt(year)&&month!="Month"){
     
     return parseMonth(day, month, dateTime);
-  }else if(yearComp==year&&month=="Month"){
+  }else if(yearComp==parseInt(year)&&month=="Month"){
     return true;
   }
   else{
@@ -588,10 +724,10 @@ function parseMonth(day, month, dateTime){
   //   // console.log(dateTime[i]);
   //    monthComp+=dateTime[index];
   // }
-  if(monthComp==month-1&&day!="Day"){
+  if(monthComp==parseInt(month)-1&&day!="Day"){
     
     return parseDay(day, dateTime);
-  }else if(monthComp==month-1&&day=="Day"){
+  }else if(monthComp==parseInt(month)-1&&day=="Day"){
   return true;  
   }
   else{
@@ -608,7 +744,7 @@ function parseDay(day, dateTime, index){
   //   // console.log(dateTime[i]);
   //    dayComp+=dateTime[index];
   // }
-  if(dayComp==day){
+  if(dayComp==parseInt(day)){
     return true;
   }else{
     return false;
