@@ -243,10 +243,6 @@ div.meter {
 div.meter span {
   display: block;
   height: 100%;
-  animation: grower 1s linear;
-  -moz-animation: grower 1s linear;
-  -webkit-animation: grower 1s linear;
-  -o-animation: grower 1s linear;
   position: relative;
   top: -1px;
   left: -1px;

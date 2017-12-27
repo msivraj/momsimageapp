@@ -84,20 +84,20 @@ function startApp(){
   var bar = $('span');
   var p = $('p');
 
-  var width = bar.attr('style');
-  width = width.replace("width:", "");
-  width = width.substr(0, width.length-1);
-
+  var barWidth = bar.attr('style');
+  barWidth = barWidth.replace("width:", "");
+  barWidth = barWidth.substr(0, barWidth.length-1);
 
   var interval;
   var start = 0; 
-  var end = parseInt(width);
+  var end = parseInt(barWidth);
   var current = start;
 
   var countUp = function() {
     current++;
+    bar.css('width', current + "%");
     p.html(current + "%");
-    
+
     if (current === end) {
       clearInterval(interval);
     }

@@ -24,10 +24,11 @@ const imgFolder="/Users/msivraj/Documents/imgs"
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
 var numOfDisplayedImgs=98;
 // const fs = require('fs-extra')
-
+const {dialog} = require('electron').remote;
 
 
 window.addEventListener("DOMContentLoaded", function(event) {
+  dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']})
   startApp(3);
     // window.setTimeout(function() { lazyload(); }, 200);
 });
