@@ -5,44 +5,32 @@
     <title>Hello World!</title>
     
     <link href="coolstyle.css" type="text/css"rel="stylesheet">
-    
-<!-- <link href='https://fonts.googleapis.com/css?famliy=Sofia' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Andika' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Bilbo' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Calligraffitti' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Catamaran' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Felipa' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Handlee' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=News' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Paprika' rel='stylesheet'>
-<link href='https://fonts.googleapis.com/css?famliy=Shadows' rel='stylesheet'> -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+
+
 
   
-  <script src="renderertwo.js"></script>
-  <!-- <script src="renderer.js"></script> -->
+  <!-- <script src="renderertwo.js"></script> -->
+  <script src="renderer.js"></script>
   <script src="exif.js"></script>
   <script src="lazyload.js"></script>
+  <!-- <script src="./node_modules/jquery/dist/jquery.min.js"></script> -->
   
  </head>
- 
- <!-- run with renderertwo  -->
-
  <body background="paper.jpg">
-   <div id="familyQuote">
+   <!-- <div id="familyQuote">
   <p id="quote1">Every Family has a Story to Tell...</p>
     <p id="quote2">Welcome to Ours</p>
 </div>
    <div id="images">
    </div>
    <div id="buttons">
-    <!-- <input id="clickMe" type="button" value="Load More" onclick="startApp();"/> -->
     <input id="clearIndex" type="button" value="Clear Index" onclick="clearIndex();"/>
     <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
     <input id="previouspage" type="button" value="Previous Page" onclick="loadPreviousImages();"/>
     <input id="createIndex" type="button" value="Create Index" onclick="startApp(1);"/>
   </div>
-<!-- onchange="loadNextImages(); -->
-<div id="searchMenus">
+  <div id="searchMenus">
   <select id="years">
   <option selected>Year</option>
   <option value="1994">1994</option>
@@ -144,8 +132,6 @@
   <option value="30">30</option>
   <option value="31">31</option>
 </select>
-<!-- <input id="search" type="button" value="Clear Index" onclick="clearIndex();"/> -->
-
 <input type="button" id="search" value="Search" onclick="startApp(2);"/>
 
 
@@ -156,28 +142,16 @@
   <input type="button" id="searchButton" value="Next Page" onclick="nextSearchImgs();"/>
   <input type="button" id="searchButton" value="Previous Page" onclick="previousSearchImgs();"/>
   
+</div> -->
+
+<div class="meter">
+  <span style="width:100%"></span>
+  <p></p>
 </div>
-  
-  <!-- <input type="image" class="thumbnail thumb0" src="/Users/msivraj/Downloads/winter-landscapes-43.jpg" onClick= "this.style.visibility= 'hidden', action();" /> -->
 
 
   
-  <!-- Thing to finish 
-  images disappear when each top of page make it so that they LEAVE page when reach div tag height boundary.
-  make lightbox appear in the correct spot 
-  put in memory entry text box
-  Finish in app database -->
   
-  <!-- <a href= "/Users/msivraj/Downloads/20170812_173342.jpg"> <img src="/Users/msivraj/Downloads/20170812_173342.jpg" class="thumb2"></a> -->
-  <!-- <img src="/Users/msivraj/Downloads/20170816_140943.jpg" >
-  <img src="/Users/msivraj/Downloads/20170816_140952.jpg" >
-  <img src="/Users/msivraj/Downloads/20170816_141000.jpg" >
-  <img src="/Users/msivraj/Downloads/20170816_141010.jpg" >
-  <img src="/Users/msivraj/Downloads/delicate-arch-night-stars-landscape.jpg" > -->
-  
-  
-  <!-- <img class="lazyload" data-src="/Users/msivraj/Downloads/delicate-arch-night-stars-landscape.jpg" width="200" height="200" /> -->
-  <!-- <img class="lazyload" src="img/example-thumb.jpg" data-src="img/example.jpg" width="765" height="574" /> -->
   
 
   </body>

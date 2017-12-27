@@ -169,9 +169,13 @@ function loadIntialImages(items){
       newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
       '<img class="lazyload thumbnail thumb0" data-src="'+src+'"/></a>' +
       '<div class="lightbox-target" id="div'+imgNum+'">' +
-      ' <div id="buttonDiv">' +
+      ' <div id="saveButton">' +
       '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-      ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
+      ' <input id="memorySave" type="button" value="Save" onclick=" saveMemory(this, '+imgNum+');"/>' +
+      '<div id="rotate">'+
+      ' <input id="rotateNinty" type="button" value="90"/>' +
+      ' <input id="rotateBackNinty" type="button" value="-90"/>' +
+      '</div>'+
       '</div> <a name="work"> <img id="img'+imgNum+'" src="'+src+'"> ' +
       '<a class="lightbox-close" href="#work"> </a> </div>';
       
@@ -474,6 +478,10 @@ function startApp(whatToDo){
     
     //document.write(items);
     if(whatToDo==1){
+      var exfs = require('extfs');
+      if(!exfs.isEmptySync(indexLoc)){
+        clearIndex();
+      }
       recurseDirs(imgFolder);
       writeDataToFile();
       // var nOIPath=appDir+"/imgIndex/numberOfImages.txt"

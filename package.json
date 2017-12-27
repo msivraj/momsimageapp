@@ -21,6 +21,7 @@
     "electron-inspector": "^0.1.4"
   },
   "dependencies": {
-    "extfs": "0.0.7"
+    "extfs": "0.0.7",
+    "jquery": "^3.2.1"
   }
 }

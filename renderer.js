@@ -34,43 +34,74 @@
 // var date=fs.statSync("/Users/msivraj/Documents/imgs/2006_12_16/img_0002.jpg").birthtime.getTime();
 // var dateOne=new Date(fs.statSync("/Users/msivraj/Documents/imgs/2006_12_16/img_0002.jpg").birthtime).getTime();
 // console.log(date);
-if(isImage("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")){
-try {
-  var ExifImage = require('kinda-exif').ExifImage;
-  var image = new ExifImage({
-    // image: pathModule.join(__dirname, 'space-invader.jpg')
-    // image: (imgSrc.replace(/ /g, '/'))
-    image: ("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")
-  });
-  
-  var imgDateTime=image.exifData.exif.DateTimeOriginal;
-}
-catch(err) {
-  console.log(err)
-}
-}
+// if(isImage("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")){
+// try {
+//   var ExifImage = require('kinda-exif').ExifImage;
+//   var image = new ExifImage({
+//     // image: pathModule.join(__dirname, 'space-invader.jpg')
+//     // image: (imgSrc.replace(/ /g, '/'))
+//     image: ("/Users/msivraj/Documents/imgs/2011-02-10 Thans pictures1/black flower.jpg")
+//   });
+//   
+//   var imgDateTime=image.exifData.exif.DateTimeOriginal;
+// }
+// catch(err) {
+//   console.log(err)
+// }
+// }
+// 
+// function getExtension(filename) {
+//   if(filename==undefined){
+//     return;
+//   }
+//     var parts = filename.split('.');
+//     return parts[parts.length - 1];
+// }
+// 
+// function isImage(filename) {
+//   if(filename==undefined){
+//     return;
+//   }
+//     var ext = getExtension(filename);
+//     switch (ext.toLowerCase()) {
+//     case 'jpg':
+//     case 'gif':
+//     case 'bmp':
+//     case 'png':
+//     case 'tiff':
+//         // etc
+//         return true;
+//     }
+//     return false;
+// }
 
-function getExtension(filename) {
-  if(filename==undefined){
-    return;
-  }
-    var parts = filename.split('.');
-    return parts[parts.length - 1];
-}
+window.addEventListener("DOMContentLoaded", function(event) {
+  startApp();
+    // window.setTimeout(function() { lazyload(); }, 200);
+});
+var $ = require('jquery');
+function startApp(){
+  var bar = $('span');
+  var p = $('p');
 
-function isImage(filename) {
-  if(filename==undefined){
-    return;
-  }
-    var ext = getExtension(filename);
-    switch (ext.toLowerCase()) {
-    case 'jpg':
-    case 'gif':
-    case 'bmp':
-    case 'png':
-    case 'tiff':
-        // etc
-        return true;
+  var width = bar.attr('style');
+  width = width.replace("width:", "");
+  width = width.substr(0, width.length-1);
+
+
+  var interval;
+  var start = 0; 
+  var end = parseInt(width);
+  var current = start;
+
+  var countUp = function() {
+    current++;
+    p.html(current + "%");
+    
+    if (current === end) {
+      clearInterval(interval);
     }
-    return false;
+  };
+
+  interval = setInterval(countUp, (1000 / (end + 1)));
 }
