@@ -223,13 +223,14 @@ top: 0px;
 
 
 div.loadBar {
+  visibility: hidden;
   position: relative;
   width: 250px;
   height: 25px;
   border: 1px solid #b0b0b0;
-  margin-top: 50px;
+  margin-top: 3px;
   /* viewing purposes */
-  margin-left: 100px;
+  /* margin-left: 100px; */
   /* viewing purposes */
   -webkit-box-shadow: inset 0 3px 5px 0 #d3d0d0;
   -moz-box-shadow: inset 0 3px 5px 0 #d3d0d0;
