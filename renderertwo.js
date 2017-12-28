@@ -6,6 +6,13 @@
 // 
 // randDay = 15
 //ADD A GOTO PAGE BUTTON
+const __fs = require('fs');
+const __path = require('path');
+const __os = require('os');
+const __fsExtra = require('fs-extra');
+const __electron = require('electron');
+const __extfs = require('extfs');
+const __kindaExif = require('kinda-exif');
 
 var numberOfIndexs=0;
 var numberOfImages=0;
@@ -14,21 +21,21 @@ var searchCount=0;
 var indexTxtData={};
 indexTxtData.jpgDataArr=[];
 var searchImgs=[];
-var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
-var path = require('path');
-var appDir = path.dirname(require.main.filename);//"/Users/msivraj/IdeaProjects/HTMLCSSJSProjects/momsimageapp"
+// var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
+var launchDir = __path.dirname(require.main.filename);//"/Users/msivraj/IdeaProjects/HTMLCSSJSProjects/momsimageapp"
+var appDir = __os.homedir() + "/.mia";
+__fs.mkdir(appDir);
 var indexLoc=appDir+"/index.txt";
 // const imgFolder='/Users/msivraj/Documents/2006_12_25';
-const imgFolder="/Users/msivraj/Documents/imgs"
+// const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
 var numOfDisplayedImgs=98;
-// const fs = require('fs-extra')
-const {dialog} = require('electron').remote;
+
+const {dialog} = __electron.remote;
 
 
 window.addEventListener("DOMContentLoaded", function(event) {
-  dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']})
   startApp(3);
     // window.setTimeout(function() { lazyload(); }, 200);
 });
@@ -40,13 +47,15 @@ function deleteImages(){
 
 }
 
-function clearIndex(){
-  var fs = require('fs');
-fs.truncate(indexLoc, 0, function(){console.log('done')});
+function clearIndex() {
+  // indexTxtData = {};
+  // indexTxtData.jpgDataArr=[];
+
+  __fs.truncate(indexLoc, 0, function(){console.log('done')});
 }
 
-function loadNextImages(){
-  // var fs=require('fs-extra');
+function loadNextImages() {
+  
   if(count!=0){
     deleteImages();
   }
@@ -58,21 +67,24 @@ function loadNextImages(){
     //   return;
     // }
     // var fileName="/Users/msivraj/Documents/imgIndex/"+count+":"+dateTimeval+".txt";
-    for(var i=0;i<numOfDisplayedImgs;i++){
+    for(var i=0;i<numOfDisplayedImgs;i++) {
       
       // var srcLoc="/Users/msivraj/Documents/imgIndex/"+count+"/src.txt"
       // var srcLoc=appDir+"/imgIndex/"+count+"/src.txt";
       
-      var src=indexTxtData.jpgDataArr[count].src;
-      
-      // if(fs.existsSync(srcLoc)){
-        addImagesToPageOne(src, count);
-        count++;
-      // }
-      // else{
-      //   i--;
-      // }
-      
+      if(indexTxtData.jpgDataArr[count]) {
+        var src=indexTxtData.jpgDataArr[count].src;
+        
+        // if(__fs.existsSync(srcLoc)){
+          addImagesToPageOne(src, count);
+          count++;
+        // }
+        // else{
+        //   i--;
+        // }
+      } else {
+        break;
+      }
     
     }
     window.setTimeout(function() { lazyload(); }, 500);
@@ -160,8 +172,8 @@ function loadIntialImages(items){
    }
    
    function addImagesToPageOne(src, imgNum){
-    //  var fs=require('fs-extra');
-    //  fs.readFile(srcLoc, 'utf8', function(err, items){
+    
+    //  __fs.readFile(srcLoc, 'utf8', function(err, items){
       //  var path=items;
        var newSpan=document.createElement('span');
        newSpan.id='sp'+imgNum;
@@ -188,15 +200,17 @@ function loadIntialImages(items){
    
    function nextSearchImgs(){
      if(searchCount!=0){
-    deleteImages();
-  }
-     for(var i=0;i<numOfDisplayedImgs;i++){
+       deleteImages();
+     }
+     
+     for(var i=0;i<numOfDisplayedImgs;i++) {
        
        var src=searchImgs[searchCount].src;
        var imgNum=searchImgs[searchCount].imgNum;
          addImagesToPageOne(src, imgNum);
          searchCount++;
      }
+     
      window.setTimeout(function() { lazyload(); }, 200);
    }
    
@@ -275,8 +289,8 @@ function loadIntialImages(items){
      
    }
    
-   function saveMemory(buttonId, imgNum){
-     var fs=require('fs-extra');
+  function saveMemory(buttonId, imgNum) {
+     
      //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
      var image=document.getElementById("img"+imgNum+"")
      var fileLocation=image.src+".memory.txt"
@@ -284,45 +298,44 @@ function loadIntialImages(items){
      var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
      var toWrite=document.getElementById(textBoxId).value;
-     fs.outputFile(fileLocation, toWrite, (err) => {
+     __fsExtra.outputFile(fileLocation, toWrite, (err) => {
        if (err) throw err;
   // console.log('The file has been saved!');
     });
      //writeToFile(filePath, toWrite);
-   }
+  }
    
    function displaySavedMemory(imgNum){
     //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
     //  var file='/memory'+imgNumber+'.txt';
     var image=document.getElementById("img"+imgNum+"")
     var fileLocation=image.src+".memory.txt"
-     var textBoxId='memory'+imgNum;
+    var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
-     var fs = require('fs-extra');
 
-     fs.readFile(fileLocation, function(err, items){
+     __fsExtra.readFile(fileLocation, function(err, items){
        document.getElementById(textBoxId).value = items;
      });     
    }
    
-   function generateIndexLoc(){
-    //  var imgFolder=appDir+"/imgIndex/"+numberOfImages;
-    var imgFolder;
-    if(numberOfImages<=5000){
-      imgFolder=appDir+"/imgIndex/"+numberOfImages;
-    }
-     else if(numberOfImages>5000){
-      //  numberOfImages=1;
-       numberOfIndexs=numberOfImages/5000>>0;
-       imgFolder=appDir+"/imgIndex"+numberOfIndexs+"/"+numberOfImages;
-     }
-     console.log(numberOfImages);
-     console.log(imgFolder);
+  //  function generateIndexLoc(){
+  //   //  var imgFolder=appDir+"/imgIndex/"+numberOfImages;
+  //   var imgFolder;
+  //   if(numberOfImages<=5000){
+  //     imgFolder=appDir+"/imgIndex/"+numberOfImages;
+  //   }
+  //    else if(numberOfImages>5000){
+  //     //  numberOfImages=1;
+  //      numberOfIndexs=numberOfImages/5000>>0;
+  //      imgFolder=appDir+"/imgIndex"+numberOfIndexs+"/"+numberOfImages;
+  //    }
+  //    console.log(numberOfImages);
+  //    console.log(imgFolder);
      
      
-     return imgFolder;
+  //    return imgFolder;
      
-   }
+  //  }
    
    function generateRandomDate(seed, adder){
      var randNum=Math.floor(Math.random() * seed)+adder;
@@ -330,15 +343,15 @@ function loadIntialImages(items){
    }
    
    function createDataArray(imgSrc, imgDateTime){
-    //  var fs=require('fs-extra');
+    
     //  var srcLoc=generateIndexLoc()+"/src.txt";
     //  var imgDateTimeLoc=generateIndexLoc()+"/datetime.txt";
     // 
-    //  fs.outputFile(srcLoc, imgSrc, (err) => {
+    //  __fsExtra.outputFile(srcLoc, imgSrc, (err) => {
     //    if (err) throw err;
     // });
     // 
-    // fs.outputFile(imgDateTimeLoc, imgDateTime, (err)=>{
+    // __fsExtra.outputFile(imgDateTimeLoc, imgDateTime, (err)=>{
     //   if(err) throw err;
     // });
     // console.log(imgSrc);
@@ -353,12 +366,11 @@ function loadIntialImages(items){
       // // jpgData.date=new Date(2000,0,1).getTime();
       // jpgData.date=new Date(randYear,randMonth,randDay).getTime();
       // jpgData.src=imgSrc;
-      var fs=require('fs-extra');
-      // var date=new Date(fs.statSync(imgSrc).birthtime.getTime());
+      // var date=new Date(__fsExtra.statSync(imgSrc).birthtime.getTime());
       jpgData.src=imgSrc;
-      jpgData.date=new Date(fs.statSync(imgSrc).birthtime).getTime();
+      jpgData.date=new Date(__fsExtra.statSync(imgSrc).birthtime).getTime();
       
-    }else{
+    } else {
       // var dateTime="2007:06:13 09:33:56";
       var pieces=imgDateTime.split(" ");
       var jpgDate=pieces[0].split(":");
@@ -373,21 +385,21 @@ function loadIntialImages(items){
     
    }
    
-   function writeDataToFile(){
+   function writeDataToFile() {
      
-     require('fs').writeFile(
+      __fs.writeFile(
 
-    appDir+"/index.txt",
+        appDir+"/index.txt",
 
-    JSON.stringify(indexTxtData),
+        JSON.stringify(indexTxtData),
 
-    function (err) {
-        if (err) {
-            console.error('Crap happens');
+        function (err) {
+            if (err) {
+                console.error('Crap happens');
+            }
         }
-    }
-);
-   }
+      );
+  }
    
   //  (function hideSaveButton(buttonId){
   //  var button = document.getElementById(buttonId);
@@ -415,7 +427,7 @@ function getExtension(filename) {
 
 function isImage(filename) {
   if(filename==undefined){
-    return;
+    return false;
   }
     var ext = getExtension(filename);
     switch (ext.toLowerCase()) {
@@ -449,24 +461,25 @@ function getDateandTime(imgSrc) {
   //   //THIS METHOD CREATES THE IMG INDEX
   //   writeToFolder(imgSrc, imgDateTime);
   // });
-  var ExifImage = require('kinda-exif').ExifImage;
+  var ExifImage = __kindaExif.ExifImage;
   // var isGo=true;
-  try{
-  var image = new ExifImage({
-    // image: pathModule.join(__dirname, 'space-invader.jpg')
-    // image: (imgSrc.replace(/ /g, '/'))
-    image: (imgSrc)
-  
-  });
-  
-  var imgDateTime=image.exifData.exif.DateTimeOriginal;
-  //LEAVING LINE 373 IN WILL MAKE IT SO THAT ONLY JPGS ARE DISPLAYED.
-  // createDataArray(imgSrc, imgDateTime);
-}
-catch(err){
-  console.log("ERROR"+imgSrc+imgDateTime);
-   return;
-}
+  try {
+    var image = new ExifImage({
+      // image: pathModule.join(__dirname, 'space-invader.jpg')
+      // image: (imgSrc.replace(/ /g, '/'))
+      image: (imgSrc)
+    
+    });
+    
+    var imgDateTime = image.exifData.exif.DateTimeOriginal;
+    //LEAVING LINE 373 IN WILL MAKE IT SO THAT ONLY JPGS ARE DISPLAYED.
+    // createDataArray(imgSrc, imgDateTime);
+  }
+  catch(err){
+    console.log("ERROR: " + imgSrc + " :: " + imgDateTime + " :: " + err);
+    return;
+  }
+
   // var imgFolder=appDir+"/imgIndex/"+imgNum;
   //THIS METHOD CREATES THE IMG INDEX
   //LEAVING LINE 381 AND 376 IN WILL ALLOW FOR ALL IMG TYPES TO BE DISPLAYED EVEN CORRUPTED ONES
@@ -474,47 +487,48 @@ catch(err){
 }
 
 function startApp(whatToDo){
-  // var fs = require('fs-extra');
-  // fs.readdir(imgFolder, function(err, items){
+  
+  // __fsExtra.readdir(imgFolder, function(err, items){
     
     //document.write(items);
     if(whatToDo==1){
-      var exfs = require('extfs');
-      if(!exfs.isEmptySync(indexLoc)){
+      
+      if(!__extfs.isEmptySync(indexLoc)){
         clearIndex();
       }
-      recurseDirs(imgFolder);
+      var imgFolders = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']})
+      recurseDirs(imgFolders[0]);
       writeDataToFile();
       // var nOIPath=appDir+"/imgIndex/numberOfImages.txt"
-      // var fs=require('fs-extra');
-      // fs.outputFile(nOIPath, numberOfImages, (err) => {
+      
+      // __fsExtra.outputFile(nOIPath, numberOfImages, (err) => {
       //   if (err) throw err;
    // console.log('The file has been saved!');
     //  });
       // var nonImgCount=createIndex(items);
     //   numberOfImages=items.length-nonImgCount;
     //   var nOIPath=""+appDir+"/imgIndex/numberOfImages.txt"
-    //   fs.outputFile(nOIPath, numberOfImages, (err) => {
+    //   __fsExtra.outputFile(nOIPath, numberOfImages, (err) => {
     //     if (err) throw err;
     //  });
     }
     else if(whatToDo==2){
-      // var fs=require('fs-extra');
-      // var content=fs.readFileSync(indexLoc, 'utf8');
+      
+      // var content=__fsExtra.readFileSync(indexLoc, 'utf8');
       // jpgDataArr=JSON.parse(content);
       searchImages();
     }
     else if(whatToDo==3){
       // loadIntialImages(items);
-      var fs=require('fs-extra');
-      var exfs = require('extfs');
-      if(exfs.isEmptySync(indexLoc)){
+      
+      
+      if(__extfs.isEmptySync(indexLoc)){
         console.log(indexTxtData.jpgDataArr.length);
         
           alert("Please click create index button.");
           return;
       }
-      var content=fs.readFile(indexLoc, 'utf8', function(err, content){
+      var content=__fsExtra.readFile(indexLoc, 'utf8', function(err, content){
         // try{
           indexTxtData=JSON.parse(content);
         // }catch(err){
@@ -538,31 +552,33 @@ function startApp(whatToDo){
 
 function recurseDirs(nextDir){
   // var imgCount=imgCountIn;
-  var fs=require('fs-extra');
+  
   // var path=imgFolder;
-  // fs.readdir(nextDir, function(err, items){
-  var items=fs.readdirSync(nextDir)
-    for(var i=0;i<items.length;i++){
-      // var stats = fs.statSync(nextDir+"/"+items[i]).isDirectory();
-      if(fs.statSync(nextDir+"/"+items[i]).isDirectory()){//breaks of the statSync method.
+  // __fsExtra.readdir(nextDir, function(err, items){
+  var items=__fsExtra.readdirSync(nextDir)
+    for(var i=0;i<items.length;i++) {
+      // var stats = __fsExtra.statSync(nextDir+"/"+items[i]).isDirectory();
+      if(__fsExtra.statSync(nextDir+"/"+items[i]).isDirectory()) {//breaks of the statSync method.
         recurseDirs(nextDir+"/"+items[i])
-      }else{
+      } else {
         // imgCount=createIndex(nextDir+"/"+items[i], imgCount);
         createIndex(nextDir+"/"+items[i]);
         // numberOfImages=items.length-nonImgCount;
         
       }
-      }
+    }
       
     // });
     
-  }
+}
 
 
  function createIndex(file){
   
-      if(isImage(file)){
+      if(!indexTxtData[file] && isImage(file)){
         
+        indexTxtData[file] = true;
+
         numberOfImages++;
         
         getDateandTime(file);
@@ -615,8 +631,8 @@ function searchImages(){
   var day=readDay();
   // var arrOfImgs=[];
   
-  // fs.readFile(indexLoc, 'utf8', function(err, items){
-  // var content=fs.readFileSync(indexLoc, 'utf8');
+  // __fs.readFile(indexLoc, 'utf8', function(err, items){
+  // var content=__fsExtra.readFileSync(indexLoc, 'utf8');
     // jpgDataArr=JSON.parse(items);
     // console.log("date:", jpgDataArr.date);
     for(var i=0;i<indexTxtData.jpgDataArr.length;i++){
@@ -677,15 +693,15 @@ function parseDate(dayIn, monthIn, yearIn, dateIn){
 //     return;
 //   }
 //   var dataTimeStr;
-//   var fs=require('fs-extra');
-//   var strNumberOfImages=fs.readFileSync(numberOfImagesPath);
+
+//   var strNumberOfImages=__fsExtra.readFileSync(numberOfImagesPath);
 //   numberOfImages=parseInt(strNumberOfImages,10);
 //     for(var i=0;i<numberOfImages;i++){
 //       var dateTimePath="/Users/msivraj/Documents/imgIndex/"+i+"/datetime.txt";
 //       var srcPath="/Users/msivraj/Documents/imgIndex/"+i+"/src.txt"
 // 
-// if(fs.existsSync(dateTimePath)) {
-//   dateTimeStr=fs.readFileSync(dateTimePath, 'utf8');
+// if(__fsExtra.existsSync(dateTimePath)) {
+//   dateTimeStr=__fsExtra.readFileSync(dateTimePath, 'utf8');
 //     var isExist=parseYear(day, month, year, dateTimeStr);
 //     if(isExist){
 //       addImagesToPageOne(srcPath, i);

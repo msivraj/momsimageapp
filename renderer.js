@@ -87,6 +87,7 @@ function startApp(){
   var barWidth = bar.attr('style');
   barWidth = barWidth.replace("width:", "");
   barWidth = barWidth.substr(0, barWidth.length-1);
+  bar.css('width', '0%');
 
   var interval;
   var start = 0; 

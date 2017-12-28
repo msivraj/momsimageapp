@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "extfs": "0.0.7",
-    "jquery": "^3.2.1"
+    "jquery": "^3.2.1",
+    "kinda-exif": "^0.4.1"
   }
 }
