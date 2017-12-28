@@ -24,7 +24,6 @@ var searchImgs=[];
 // var numberOfImagesPath="/Users/msivraj/Documents/imgIndex/numberOfImages.txt"
 var launchDir = __path.dirname(require.main.filename);//"/Users/msivraj/IdeaProjects/HTMLCSSJSProjects/momsimageapp"
 var appDir = __os.homedir() + "/.mia";
-__fs.mkdir(appDir);
 var indexLoc=appDir+"/index.txt";
 // const imgFolder='/Users/msivraj/Documents/2006_12_25';
 // const imgFolder="/Users/msivraj/Documents/imgs"
@@ -199,6 +198,7 @@ function loadIntialImages(items){
    }
    
    function nextSearchImgs(){
+     if(!searchImgs.length==0){
      if(searchCount!=0){
        deleteImages();
      }
@@ -212,6 +212,10 @@ function loadIntialImages(items){
      }
      
      window.setTimeout(function() { lazyload(); }, 200);
+   }else{
+     alert("No images were indexed for this year.");
+     clearSearch();
+   }
    }
    
    function previousSearchImgs(){
@@ -388,8 +392,8 @@ function loadIntialImages(items){
    function writeDataToFile() {
      
       __fs.writeFile(
-
-        appDir+"/index.txt",
+        indexLoc,
+        // appDir+"/index.txt",
 
         JSON.stringify(indexTxtData),
 
@@ -520,23 +524,29 @@ function startApp(whatToDo){
     }
     else if(whatToDo==3){
       // loadIntialImages(items);
-      
+      if(!__fs.existsSync(appDir)){
+        __fs.mkdirSync(appDir);
+      }
       
       if(__extfs.isEmptySync(indexLoc)){
         console.log(indexTxtData.jpgDataArr.length);
         
           alert("Please click create index button.");
-          return;
+          // return;
+      }else{
+        var content=__fsExtra.readFile(indexLoc, 'utf8', function(err, content){
+        
+            indexTxtData=JSON.parse(content);
+              });
       }
-      var content=__fsExtra.readFile(indexLoc, 'utf8', function(err, content){
         // try{
-          indexTxtData=JSON.parse(content);
+        
         // }catch(err){
         //   alert("Please click create index button.")
         // }
         
         
-      });
+    
       // console.log(indexTxtData.jpgDataArr.length);
       // if(indexTxtData.jpgDataArr.length==0){
       //   alert("Please click create index button.");

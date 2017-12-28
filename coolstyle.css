@@ -222,7 +222,7 @@ top: 0px;
 
 
 
-div.meter {
+div.loadBar {
   position: relative;
   width: 250px;
   height: 25px;
@@ -240,7 +240,7 @@ div.meter {
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-div.meter span {
+div.loadBar span {
   display: block;
   height: 100%;
   position: relative;
@@ -266,7 +266,7 @@ div.meter span {
   -o-background-size: 45px 45px;
   background-size: 45px 45px;
 }
- div.meter span:before {
+ div.loadBar span:before {
   content: '';
   display: block;
   width: 100%;
@@ -275,7 +275,7 @@ div.meter span {
   top: 50%;
   background: rgba(0, 0, 0, 0.03);
 } 
-div.meter p {
+div.loadBar p {
   position: absolute;
   top: 0;
   margin: 0 10px;
