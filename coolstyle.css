@@ -93,6 +93,13 @@
     font-variant: small-caps;
     font-size: 1.5em;
     }
+    #lightboxButtons{
+      position: relative;
+      z-index: 3;
+      height: auto;
+      width: 350px;
+      left: 15%;
+    }
   
   #memorySave{
     position: relative;
@@ -105,13 +112,16 @@
   }
   
   
-.textbox{
+/*#memoryTextbox{
   position: relative;
-  top:90.5%;
-  left:9%;
-  z-index: 3;
+  z-index: 2;
   
-}
+}*/
+
+/*#textArea{
+  position: relative;
+  z-index: 3;
+}*/
   
 #myDiv{
   
@@ -216,6 +226,57 @@ max-width: 100%;
 top: 0px;
 }
 
+
+
+/*THIS IS FOR THE ROTATE FUNCTIONALITY*/
+#rotate30 {
+/*General*/
+transform: rotate(30deg);
+/*Firefox*/
+-moz-transform: rotate(30deg);
+/*Microsoft Internet Explorer*/
+-ms-transform: rotate(30deg);
+/*Chrome, Safari*/
+-webkit-transform: rotate(30deg);
+/*Opera*/
+-o-transform: rotate(30deg);
+/*alter opacity*/
+opacity:0.8;
+filter:alpha(opacity=80);
+}
+
+#rotate60 {
+/*General*/
+transform: rotate(60deg);
+/*Firefox*/
+-moz-transform: rotate(60deg);
+/*Microsoft Internet Explorer*/
+-ms-transform: rotate(60deg);
+/*Chrome, Safari*/
+-webkit-transform: rotate(60deg);
+/*Opera*/
+-o-transform: rotate(60deg);
+/*alter opacity*/
+opacity:0.6;
+filter:alpha(opacity=60);
+}
+
+/*rotate 90 degrees*/
+#rotate90 {
+/*General*/
+transform: rotate(90deg);
+/*Firefox*/
+-moz-transform: rotate(90deg);
+/*Microsoft Internet Explorer*/
+-ms-transform: rotate(90deg);
+/*Chrome, Safari*/
+-webkit-transform: rotate(90deg);
+/*Opera*/
+-o-transform: rotate(90deg);
+/*alter opacity*/
+opacity:0.4;
+filter:alpha(opacity=40);
+}
 
 
 

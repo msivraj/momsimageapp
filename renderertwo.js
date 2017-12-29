@@ -31,7 +31,7 @@ var indexLoc=appDir+"/index.txt";
 // const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=98;
+var numOfDisplayedImgs=5;
 
 const {dialog} = __electron.remote;
 
@@ -181,16 +181,20 @@ function loadIntialImages(items){
        newSpan.margin='auto';
       
       newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
-      '<img class="lazyload thumbnail thumb0" data-src="'+src+'"/></a>' +
+      '<img class="lazyload thumbnail thumb0" id="img'+imgNum+'" data-src="'+src+'"/></a>' +
       '<div class="lightbox-target" id="div'+imgNum+'">' +
-      ' <div id="saveButton">' +
-      '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-      ' <input id="memorySave" type="button" value="Save" onclick=" saveMemory(this, '+imgNum+');"/>' +
-      '<div id="rotate">'+
-      ' <input id="rotateNinty" type="button" value="90"/>' +
-      ' <input id="rotateBackNinty" type="button" value="-90"/>' +
-      '</div>'+
-      '</div> <a name="work"> <img id="img'+imgNum+'" src="'+src+'"> ' +
+      // '<textarea id="memory'+imgNum+'" ></textarea>'+
+      '<div id="lightboxButtons">'+
+      '<div ><textarea id="memory'+imgNum+'" ></textarea></div>'+
+      '<button id="memorySave" type="button" onclick=" saveMemory(this, '+imgNum+');">Save</button>'+
+      '<button id="rotateNinty" type="button" onclick="rotateClockwise('+imgNum+');">Rotate Clockwise</button>'+
+      '<button id="rotateBackNinty" type="button" onclick="rotateCounterClockwise('+imgNum+');">Rotate Counter Clockwise</button>'+
+      
+      // ' <input id="memorySave" type="button" value="Save" onclick=" saveMemory(this, '+imgNum+');"/>' +
+      // ' <input id="rotateNinty" type="button" value="Rotate Clockwise" onclick="rotateClockwise();"/>' +
+      // ' <input id="rotateBackNinty" type="button" value="Rotate Counter Clockwize" onclick="rotateCounterClockwise();"/>' +
+      
+      '</div> <a name="work"> <img id="lightboxImg'+imgNum+'" src="'+src+'"> ' +
       '<a class="lightbox-close" href="#work"> </a> </div>';
       
        document.getElementById('images').appendChild(newSpan);
@@ -203,6 +207,8 @@ function loadIntialImages(items){
      if(!searchImgs.length==0){
      if(searchCount!=0){
        deleteImages();
+     }if(numOfDisplayedImgs>searchImgs.length){
+       numOfDisplayedImgs=searchImgs.length;
      }
      
      for(var i=0;i<numOfDisplayedImgs;i++) {
@@ -836,4 +842,15 @@ function parseDay(day, dateTime, index){
   }else{
     return false;
   }
+}
+
+function rotateClockwise(imgNumIn){
+  var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
+  lboxImg.style.transform="rotate(90deg)"
+  // lboxImg.webkit-transform="rotate(90deg)";
+}
+
+function rotateCounterClockwise(imgNumIn){
+  var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
+  lboxImg.style.transform="rotate(-90deg)"
 }

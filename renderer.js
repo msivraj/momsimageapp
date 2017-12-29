@@ -75,35 +75,29 @@
 //     return false;
 // }
 
-window.addEventListener("DOMContentLoaded", function(event) {
-  startApp();
-    // window.setTimeout(function() { lazyload(); }, 200);
-});
-var $ = require('jquery');
+// window.addEventListener("DOMContentLoaded", function(event) {
+//   startApp();
+//     // window.setTimeout(function() { lazyload(); }, 200);
+// });
+// var $ = require('jquery');
+// 
+// function startApp(){
+//   var bar = $('span');
+//   var p = $('p');
+// 
+//   var barWidth = bar.attr('style');
+//   barWidth = barWidth.replace("width:", "");
+//   barWidth = barWidth.substr(0, barWidth.length-1);
+//   bar.css('width', '0%');
+// 
+//   var interval;
+//   var start = 0; 
+//   var end = parseInt(barWidth);
+//   var current = start;
+// 
+//   var countUp = function() {
+//     current++;
+//     bar.css('width', current + "%");
+//     p.html(current + "%");
 
-function startApp(){
-  var bar = $('span');
-  var p = $('p');
 
-  var barWidth = bar.attr('style');
-  barWidth = barWidth.replace("width:", "");
-  barWidth = barWidth.substr(0, barWidth.length-1);
-  bar.css('width', '0%');
-
-  var interval;
-  var start = 0; 
-  var end = parseInt(barWidth);
-  var current = start;
-
-  var countUp = function() {
-    current++;
-    bar.css('width', current + "%");
-    p.html(current + "%");
-
-    if (current === end) {
-      clearInterval(interval);
-    }
-  };
-
-  interval = setInterval(countUp, (1000 / (end + 1)));
-}

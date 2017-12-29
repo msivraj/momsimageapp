@@ -23,10 +23,15 @@
    <div id="images">
    </div>
    <div id="buttons">
-    <input id="clearIndex" type="button" value="Clear Index" onclick="clearIndex();"/>
+    <!-- <input id="clearIndex" type="button" value="Clear Index" onclick="clearIndex();"/>
     <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
     <input id="previouspage" type="button" value="Previous Page" onclick="loadPreviousImages();"/>
-    <input id="createIndex" type="button" value="Create Index" onclick="startApp(1);"/>
+    <input id="createIndex" type="button" value="Create Index" onclick="startApp(1);"/> -->
+    <button id="clearIndex" type="button" onclick="clearIndex();">Clear Index</button>
+    <button id="nextpage" type="button" onclick="loadNextImages();"> Next Page</button>
+    <button id="previouspage" type="button" onclick="loadPreviousImages();">Previous Page</button>
+    <button id="createIndex" type="button" onclick="startApp(1);">Create Index</button>
+
   </div>
   <div id="searchMenus">
   <select id="years">
@@ -130,7 +135,8 @@
   <option value="30">30</option>
   <option value="31">31</option>
 </select>
-<input type="button" id="search" value="Search" onclick="startApp(2);"/>
+<!-- <input type="button" id="search" value="Search" onclick="startApp(2);"/> -->
+<button type="button" id="search" onclick="startApp(2);">Search</button>
 
 
 <div id="progressBar" class="loadBar">
@@ -142,10 +148,10 @@
 </div>
 
 <div id="searchButtons">
-  <input type="button" id="searchButton" value="Clear Search" onclick="clearSearch();"/>
-  <input type="button" id="searchButton" value="Next Page" onclick="nextSearchImgs();"/>
-  <input type="button" id="searchButton" value="Previous Page" onclick="previousSearchImgs();"/>
-  
+  <button type="button" id="searchButton" onclick="clearSearch();">Clear Search</button>
+  <button type="button" id="searchButton" onclick="nextSearchImgs();">Next Page</button>
+  <button type="button" id="searchButton" onclick="previousSearchImgs();">Previous Page</button>
+
 </div>
 
   </body>
