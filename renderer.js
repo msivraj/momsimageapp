@@ -80,6 +80,7 @@ window.addEventListener("DOMContentLoaded", function(event) {
     // window.setTimeout(function() { lazyload(); }, 200);
 });
 var $ = require('jquery');
+
 function startApp(){
   var bar = $('span');
   var p = $('p');

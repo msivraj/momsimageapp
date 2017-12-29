@@ -14,6 +14,8 @@ const __electron = require('electron');
 const __extfs = require('extfs');
 const __kindaExif = require('kinda-exif');
 
+var TOTAL_FILES_TO_INDEX=0;
+var TOTAL_FILES_ALREADY_INDEXED=0;
 var numberOfIndexs=0;
 var numberOfImages=0;
 var count=0;
@@ -346,7 +348,7 @@ function loadIntialImages(items){
      return randNum;
    }
    
-   function createDataArray(imgSrc, imgDateTime){
+   function createDataArray(imgSrc, imgDateTime, loadBar){
     
     //  var srcLoc=generateIndexLoc()+"/src.txt";
     //  var imgDateTimeLoc=generateIndexLoc()+"/datetime.txt";
@@ -384,12 +386,25 @@ function loadIntialImages(items){
       jpgData.src=imgSrc;
     }
     indexTxtData.jpgDataArr.push(jpgData);
-    console.log(numberOfImages+" :: "+JSON.stringify(jpgData));
+    //console.log(numberOfImages+" :: "+JSON.stringify(jpgData));
+
+
+    var loadBarSpan = loadBar.querySelector('span');
+    var currentWidth = ((TOTAL_FILES_ALREADY_INDEXED * 100) / TOTAL_FILES_TO_INDEX); //parseInt(loadBarSpan.style.width.substring(0, loadBarSpan.style.width.length-1));
+    //console.log("currentWidth :: "+currentWidth);
+    //console.log("TOTAL_FILES_ALREADY_INDEXED :: "+TOTAL_FILES_ALREADY_INDEXED);
+    //console.log("TOTAL_FILES_TO_INDEX :: "+TOTAL_FILES_TO_INDEX);
+    loadBarSpan.style.width = currentWidth + '%';
+    loadBar.querySelector('p').innerHTML = loadBarSpan.style.width;          
+    if(TOTAL_FILES_TO_INDEX === TOTAL_FILES_ALREADY_INDEXED) {
+      writeDataToFile(loadBar);
+    }
+
     // }
     
    }
    
-   function writeDataToFile() {
+   function writeDataToFile(loadBar) {
      
       __fs.writeFile(
         indexLoc,
@@ -398,12 +413,15 @@ function loadIntialImages(items){
         JSON.stringify(indexTxtData),
 
         function (err) {
-            if (err) {
-                console.error('Crap happens');
-            }
+          setTimeout(function() { loadBar.style.visibility='hidden'; }, 10000);
+          if (err) {
+              console.error('Crap happens');
+          }
         }
       );
-  }
+      
+      console.log("Wrote index to file!!!");
+    }
    
   //  (function hideSaveButton(buttonId){
   //  var button = document.getElementById(buttonId);
@@ -446,7 +464,7 @@ function isImage(filename) {
     return false;
 }
 
-function getDateandTime(imgSrc) {
+function getDateandTime(imgSrc, loadBar) {
   // if(imageElement==undefined){
   //   return;
   // }
@@ -468,6 +486,7 @@ function getDateandTime(imgSrc) {
   var ExifImage = __kindaExif.ExifImage;
   // var isGo=true;
   try {
+    ++TOTAL_FILES_ALREADY_INDEXED;
     var image = new ExifImage({
       // image: pathModule.join(__dirname, 'space-invader.jpg')
       // image: (imgSrc.replace(/ /g, '/'))
@@ -487,7 +506,7 @@ function getDateandTime(imgSrc) {
   // var imgFolder=appDir+"/imgIndex/"+imgNum;
   //THIS METHOD CREATES THE IMG INDEX
   //LEAVING LINE 381 AND 376 IN WILL ALLOW FOR ALL IMG TYPES TO BE DISPLAYED EVEN CORRUPTED ONES
-  createDataArray(imgSrc, imgDateTime);
+  createDataArray(imgSrc, imgDateTime, loadBar);
 }
 
 function startApp(whatToDo){
@@ -497,12 +516,20 @@ function startApp(whatToDo){
     //document.write(items);
     if(whatToDo==1){
       
+      var loadBar = document.getElementById('progressBar');
+
       if(!__extfs.isEmptySync(indexLoc)){
         clearIndex();
       }
       var imgFolders = dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']})
-      recurseDirs(imgFolders[0]);
-      writeDataToFile();
+      loadBar.style.visibility='visible';
+      loadBar.querySelector('span').style.width = '0%';
+      loadBar.querySelector('p').innerHTML = '0%';
+      TOTAL_FILES_TO_INDEX=0;
+      TOTAL_FILES_ALREADY_INDEXED=0;
+      recurseDirs(imgFolders[0], loadBar).then(function() {
+        //writeDataToFile();
+      });
       // var nOIPath=appDir+"/imgIndex/numberOfImages.txt"
       
       // __fsExtra.outputFile(nOIPath, numberOfImages, (err) => {
@@ -560,38 +587,63 @@ function startApp(whatToDo){
 //}
 
 
-function recurseDirs(nextDir){
+function recurseDirs(nextDir, loadBar){
   // var imgCount=imgCountIn;
   
   // var path=imgFolder;
   // __fsExtra.readdir(nextDir, function(err, items){
-  var items=__fsExtra.readdirSync(nextDir)
-    for(var i=0;i<items.length;i++) {
-      // var stats = __fsExtra.statSync(nextDir+"/"+items[i]).isDirectory();
-      if(__fsExtra.statSync(nextDir+"/"+items[i]).isDirectory()) {//breaks of the statSync method.
-        recurseDirs(nextDir+"/"+items[i])
-      } else {
-        // imgCount=createIndex(nextDir+"/"+items[i], imgCount);
-        createIndex(nextDir+"/"+items[i]);
-        // numberOfImages=items.length-nonImgCount;
-        
+  return new Promise((resolve, reject) => {
+    __fsExtra.readdir(nextDir, function(err, items) {
+      var itemsChecked = 0;
+      const MAX_ITEMS = items.length;
+      for(var i=0;i<MAX_ITEMS;i++) {
+        // var stats = __fsExtra.statSync(nextDir+"/"+items[i]).isDirectory();
+        var statFunc = function(filePath) {
+          return function(err, dirToCheck) {
+            if(dirToCheck.isDirectory()) {//breaks of the statSync method.
+              recurseDirs(filePath, loadBar).then(function() {
+                //resolve(true);
+            
+                // var loadBarSpan = loadBar.querySelector('span');
+                // var currentWidth = parseInt(loadBarSpan.style.width.substring(0, loadBarSpan.style.width.length-1));
+                // loadBarSpan.style.width = (currentWidth+1) + '%';
+                // loadBar.querySelector('p').innerHTML = loadBarSpan.style.width;          
+              });
+            } else {
+              // imgCount=createIndex(nextDir+"/"+items[i], imgCount);
+              createIndex(filePath, loadBar);
+              // var loadBarSpan = loadBar.querySelector('span');
+              // var currentWidth = parseInt(loadBarSpan.style.width.substring(0, loadBarSpan.style.width.length-1));
+              // loadBarSpan.style.width = (currentWidth+1) + '%';
+              // loadBar.querySelector('p').innerHTML = loadBarSpan.style.width;          
+            // numberOfImages=items.length-nonImgCount;
+            }
+
+            ++itemsChecked;
+            if(itemsChecked >= MAX_ITEMS) {
+              resolve(true);
+            }
+          };
+        }
+
+        __fsExtra.stat(nextDir+"/"+items[i], statFunc(nextDir+"/"+items[i]));
       }
-    }
+    });
+  });
       
-    // });
-    
 }
 
 
- function createIndex(file){
+ function createIndex(file, loadBar){
   
       if(!indexTxtData[file] && isImage(file)){
         
         indexTxtData[file] = true;
 
-        numberOfImages++;
+        ++TOTAL_FILES_TO_INDEX;
         
-        getDateandTime(file);
+        setTimeout(function() { numberOfImages++; getDateandTime(file, loadBar); }, 10);
+        
         // if(numberOfImages==18022){
         // console.log("error here");
         // }
