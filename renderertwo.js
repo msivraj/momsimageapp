@@ -31,7 +31,7 @@ var indexLoc=appDir+"/index.txt";
 // const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=5;
+var numOfDisplayedImgs=10;
 
 const {dialog} = __electron.remote;
 
@@ -187,8 +187,8 @@ function loadIntialImages(items){
       '<div id="lightboxButtons">'+
       '<div ><textarea id="memory'+imgNum+'" ></textarea></div>'+
       '<button id="memorySave" type="button" onclick=" saveMemory(this, '+imgNum+');">Save</button>'+
-      '<button id="rotateNinty" type="button" onclick="rotateClockwise('+imgNum+');">Rotate Clockwise</button>'+
-      '<button id="rotateBackNinty" type="button" onclick="rotateCounterClockwise('+imgNum+');">Rotate Counter Clockwise</button>'+
+      '<button id="rotateNinty" type="button" onclick="rotateCounterClockwise('+imgNum+');">Rotate Left</button>'+
+      '<button id="rotateBackNinty" type="button" onclick="rotateClockwise('+imgNum+');">Rotate Right</button>'+
       
       // ' <input id="memorySave" type="button" value="Save" onclick=" saveMemory(this, '+imgNum+');"/>' +
       // ' <input id="rotateNinty" type="button" value="Rotate Clockwise" onclick="rotateClockwise();"/>' +
@@ -844,13 +844,68 @@ function parseDay(day, dateTime, index){
   }
 }
 
+function getDegree(styleIn){
+  var firstSplit=styleIn.split('(');
+  var str="";
+  var returnValInt=0;
+  if(styleIn==""){
+    returnValInt=0;
+  }else{
+    for(var i=0 ;i<firstSplit[1].length;i++){
+      if(firstSplit[1].charAt(i)=="d"){
+        break;
+      }else{
+        str+=firstSplit[1].charAt(i)
+        returnValInt=parseInt(str);
+      }
+    }
+  }
+  
+  return returnValInt;
+}
+
+function calcDegRight(styleIn){
+  var rightDegree=getDegree(styleIn);
+  var returnRightStr="";
+  // if(degree==0){
+  //   degree=90;
+  //   returnRightStr="rotate("+rightDegree+"deg)";
+  //   
+  // }else{
+    rightDegree+=90;
+    returnRightStr="rotate("+rightDegree+"deg)";
+  // }
+  
+  console.log(returnRightStr);
+  return returnRightStr;
+}
+
 function rotateClockwise(imgNumIn){
   var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
-  lboxImg.style.transform="rotate(90deg)"
+  var style=lboxImg.style.transform;
+  lboxImg.style.transform=calcDegRight(style);
   // lboxImg.webkit-transform="rotate(90deg)";
+}
+
+function calcDegLeft(styleIn){
+  var leftDegree=getDegree(styleIn);
+  var returnLeftStr="";
+
+    leftDegree-=90;
+    returnLeftStr="rotate("+leftDegree+"deg)";
+    console.log(returnLeftStr);
+    return returnLeftStr;
+  
+    
+
+  
 }
 
 function rotateCounterClockwise(imgNumIn){
   var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
-  lboxImg.style.transform="rotate(-90deg)"
+  var style=lboxImg.style.transform;
+  lboxImg.style.transform=calcDegLeft(style);
+  
+  // var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
+  // lboxImg.style.transform="rotate(-90deg)"
 }
