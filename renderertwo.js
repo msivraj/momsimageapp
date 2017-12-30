@@ -32,6 +32,7 @@ var indexLoc=appDir+"/index.txt";
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
 var numOfDisplayedImgs=70;
+var pageNumber=0;
 
 const {dialog} = __electron.remote;
 
@@ -56,10 +57,17 @@ function clearIndex() {
 }
 
 function loadNextImages() {
-  
-  if(count!=0){
-    deleteImages();
+  if(count==indexTxtData.jpgDataArr.length||count>indexTxtData.jpgDataArr.length){
+    alert("This is the last page.")
+    return;
   }
+  // if(count!=0){
+  //   deleteImages();
+  // }
+  if(document.getElementById("images").innerHTML!=""){
+  deleteImages();
+}
+  
   // else{
     // var menu = document.getElementById("numOfImgMenu");
     // var num = menu.options[menu.selectedIndex].text;
@@ -88,6 +96,8 @@ function loadNextImages() {
       }
     
     }
+    pageNumber++;
+    document.getElementById("pageNumber").innerHTML=""+pageNumber+""
     window.setTimeout(function() { lazyload(); }, 1);
   // }
     
@@ -104,6 +114,8 @@ function loadPreviousImages(){
     deleteImages();
     alert("You cannot go back from image 0!");
     count=0;
+    pageNumber=0;
+    document.getElementById("pageNumber").innerHTML=""
     return;
   }
   else if(count==0){
@@ -137,40 +149,42 @@ function loadPreviousImages(){
     // }
     
   // }
+  pageNumber--;
+  document.getElementById("pageNumber").innerHTML=""+pageNumber+"";
   window.setTimeout(function() { lazyload(); }, 1);
   
 }
 
-function loadIntialImages(items){
-  var internalCount=0;
-  for (count; count<items.length; count++) {
-     if(isImage(items[count])){
-       if(internalCount<10){//469 is the last img when iC is 469 c is 470 102 is the number images i want to display
-    var f = imgFolder+'/'+items[count];
-    // var id="img"+ count;
-    
-    var newImg=document.createElement('img');
-    newImg.src=f;
-    // newImg.id=id;
-    //PUT THESE BACK IN LINE 19-20
-    // document.getElementById(id).classList.add('thumbnail');
-    // document.getElementById(id).classList.add(imageCssClass());
-    // addImagesToPage(newImg, f, id, count);
-      addImagesToPage(f, count);
-
-    // getDateandTime(newImg, f, count);
-    // var newDiv=document.createElement('div');
-    // var imageClass=imageCssClass();
-    // newDiv.innerHTML='<img src="'+f+'" class="'+imageCssClass()+' thumbnail"  id="'+id+'" display="inline"/> <p>hello</p>';
-    // document.body.appendChild(newDiv);
-    
-    internalCount++;
-  }else{
-    break;
-  }
-}
-  }
-   }
+// function loadIntialImages(items){
+//   var internalCount=0;
+//   for (count; count<items.length; count++) {
+//      if(isImage(items[count])){
+//        if(internalCount<10){//469 is the last img when iC is 469 c is 470 102 is the number images i want to display
+//     var f = imgFolder+'/'+items[count];
+//     // var id="img"+ count;
+//     
+//     var newImg=document.createElement('img');
+//     newImg.src=f;
+//     // newImg.id=id;
+//     //PUT THESE BACK IN LINE 19-20
+//     // document.getElementById(id).classList.add('thumbnail');
+//     // document.getElementById(id).classList.add(imageCssClass());
+//     // addImagesToPage(newImg, f, id, count);
+//       addImagesToPage(f, count);
+// 
+//     // getDateandTime(newImg, f, count);
+//     // var newDiv=document.createElement('div');
+//     // var imageClass=imageCssClass();
+//     // newDiv.innerHTML='<img src="'+f+'" class="'+imageCssClass()+' thumbnail"  id="'+id+'" display="inline"/> <p>hello</p>';
+//     // document.body.appendChild(newDiv);
+//     
+//     internalCount++;
+//   }else{
+//     break;
+//   }
+// }
+//   }
+//    }
    
    function addImagesToPageOne(src, imgNum){
     
@@ -194,7 +208,7 @@ function loadIntialImages(items){
       // ' <input id="rotateNinty" type="button" value="Rotate Clockwise" onclick="rotateClockwise();"/>' +
       // ' <input id="rotateBackNinty" type="button" value="Rotate Counter Clockwize" onclick="rotateCounterClockwise();"/>' +
       
-      '</div> <a name="work"> <img id="lightboxImg'+imgNum+'" src="'+src+'"> ' +
+      '</div> <a id="aHover" name="work"> <p id="pSrcHover">"'+src+'"</p> <img id="lightboxImg'+imgNum+'" src="'+src+'"> ' +
       '<a class="lightbox-close" href="#work"> </a> </div>';
       
        document.getElementById('images').appendChild(newSpan);
@@ -205,9 +219,20 @@ function loadIntialImages(items){
    
    function nextSearchImgs(){
      if(!searchImgs.length==0){
-     if(searchCount!=0){
-       deleteImages();
-     }if(numOfDisplayedImgs>searchImgs.length){
+       if(searchCount==searchImgs.length||searchCount>searchImgs.length){
+         alert("This is the last page.")
+         return;
+       }
+    //  if(searchCount!=0){
+    //    deleteImages();
+    //  }
+    
+    if(document.getElementById("images").innerHTML!=""){
+    deleteImages();
+  }
+  
+     
+     if(numOfDisplayedImgs>searchImgs.length){
        numOfDisplayedImgs=searchImgs.length;
      }
      
@@ -224,6 +249,7 @@ function loadIntialImages(items){
      alert("No images were indexed for this year.");
      clearSearch();
    }
+  //  console.log(searchImgs.length);
    }
    
    function previousSearchImgs(){
@@ -245,16 +271,17 @@ function loadIntialImages(items){
     }
   }
   
-  else if(tempCount==73){
-    deleteImages();
-    for(searchCount;searchCount<tempCount;searchCount++){
-      var src=searchImgs[searchCount].src;
-      var imgNum=searchImgs[searchCount].imgNum;
-      // var src=indexTxtData.jpgDataArr[searchCount].src;
-      addImagesToPageOne(src, imgNum);
-    }
+  // else if(tempCount==73){
+  //   deleteImages();
+  //   for(searchCount;searchCount<tempCount;searchCount++){
+  //     var src=searchImgs[searchCount].src;
+  //     var imgNum=searchImgs[searchCount].imgNum;
+  //     // var src=indexTxtData.jpgDataArr[searchCount].src;
+  //     addImagesToPageOne(src, imgNum);
+  //   }
     
-  }else{
+  // }
+  else{
     deleteImages();
     for(searchCount;searchCount<tempCount;searchCount++){
       var src=searchImgs[searchCount].src;
@@ -277,29 +304,29 @@ function loadIntialImages(items){
   
 }
    
-   function addImagesToPage(arrOfImgs){
-     
-     for(var i=0;i<arrOfImgs.length; i++){
-       var src=arrOfImgs[i].src;
-       var imgNum=arrOfImgs[i].imgNum;
-       var newSpan=document.createElement('span');
-       newSpan.id='sp'+imgNum; 
-      
-      newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
-      '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
-      '<div class="lightbox-target" id="div'+imgNum+'">' +
-      ' <div id="buttonDiv">' +
-      '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
-      ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
-      '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
-      '<a class="lightbox-close" href="#work"> </a> </div>';
-      
-       document.getElementById('images').appendChild(newSpan);
-     }
-     
-     
-     
-   }
+  //  function addImagesToPage(arrOfImgs){
+  //    
+  //    for(var i=0;i<arrOfImgs.length; i++){
+  //      var src=arrOfImgs[i].src;
+  //      var imgNum=arrOfImgs[i].imgNum;
+  //      var newSpan=document.createElement('span');
+  //      newSpan.id='sp'+imgNum; 
+  //     
+  //     newSpan.innerHTML=' <a class="lightbox" href="#div'+imgNum+'" onclick="displaySavedMemory('+imgNum+');">' +
+  //     '<img class="lazyload thumbnail thumb0" data-src="'+path+'"/></a>' +
+  //     '<div class="lightbox-target" id="div'+imgNum+'">' +
+  //     ' <div id="buttonDiv">' +
+  //     '<textarea class="textbox" id="memory'+imgNum+'" ></textarea>'+
+  //     ' <input id="memorySave" type="button" value="Save" onclick="this.style.visibility= \'visible\'; saveMemory(this, '+imgNum+');"/>' +
+  //     '</div> <a name="work"> <img id="img'+imgNum+'" src="'+path+'"> ' +
+  //     '<a class="lightbox-close" href="#work"> </a> </div>';
+  //     
+  //      document.getElementById('images').appendChild(newSpan);
+  //    }
+  //    
+  //    
+  //    
+  //  }
    
   function saveMemory(buttonId, imgNum) {
      
@@ -509,7 +536,7 @@ function getDateandTime(imgSrc, loadBar) {
     // createDataArray(imgSrc, imgDateTime);
   }
   catch(err){
-    console.log("ERROR: " + imgSrc + " :: " + imgDateTime + " :: " + err);
+    // console.log("ERROR: " + imgSrc + " :: " + imgDateTime + " :: " + err);
     return;
   }
 
@@ -566,7 +593,7 @@ function startApp(whatToDo){
       }
       
       if(__extfs.isEmptySync(indexLoc)){
-        console.log(indexTxtData.jpgDataArr.length);
+        // console.log(indexTxtData.jpgDataArr.length);
         
           alert("Please click create index button.");
           // return;
@@ -681,10 +708,12 @@ function readDay(){
 }
 function clearSearch(){
   searchCount=0;
+  numOfDisplayedImgs=70;
   searchImgs=[];
   document.getElementById("buttons").style.display="";
   document.getElementById("searchMenus").style.display="";
   document.getElementById("searchButtons").style.display="none";
+  document.getElementById("pageNumber").style.visibility="visible";
   deleteImages();
 }
 
@@ -695,6 +724,7 @@ function searchImages(){
   document.getElementById("buttons").style.display="none";
   document.getElementById("searchMenus").style.display="none";
   document.getElementById("searchButtons").style.display="inline";
+  document.getElementById("pageNumber").style.visibility="hidden";
   // document.getElementById("searchButtons").innerHTML=  '<input type="button" class="searchButtons" id="search" value="Clear Search" onclick="clearSearch();"/>'+
   // '<input type="button" class="searchButtons" id="search" value="Next Page" onclick="clearSearch();"/>'+
   // '<input type="button" class="searchButtons" id="search" value="Previous Page" onclick="clearSearch();"/>';
@@ -715,12 +745,12 @@ function searchImages(){
       
       var isExist=parseDate(day, month, year, date);
       if(isExist){
-        if(countHere==1592){
-          console.log("error");
-        }
+        // if(countHere==1592){
+        //   console.log("error");
+        // }
         var imgObj={};
         imgObj.src=src;
-        console.log(src+":"+countHere);
+        // console.log(src+":"+countHere);
         imgObj.imgNum=i;
         searchImgs.push(imgObj);
         countHere++;
@@ -734,9 +764,9 @@ function searchImages(){
 }
 
 function parseDate(dayIn, monthIn, yearIn, dateIn){
-  if(dateIn==1289804400000){
-    console.log("error here");
-  }
+  // if(dateIn==1289804400000){
+  //   console.log("error here");
+  // }
   var date= new Date(dateIn);
   // console.log(date.getFullYear()+":",date.getMonth()+":",date.getDate()+":",date);
   // var day=date.getDay();
@@ -880,7 +910,7 @@ function calcDegRight(styleIn){
     returnRightStr="rotate("+rightDegree+"deg)";
   // }
   
-  console.log(returnRightStr);
+  // console.log(returnRightStr);
   return returnRightStr;
 }
 
@@ -897,7 +927,7 @@ function calcDegLeft(styleIn){
 
     leftDegree-=90;
     returnLeftStr="rotate("+leftDegree+"deg)";
-    console.log(returnLeftStr);
+    // console.log(returnLeftStr);
     return returnLeftStr;
   
     
@@ -912,4 +942,31 @@ function rotateCounterClockwise(imgNumIn){
   
   // var lboxImg=document.getElementById("lightboxImg"+imgNumIn);
   // lboxImg.style.transform="rotate(-90deg)"
+}
+
+function getPageNum(intIn) {
+    if(document.getElementById("images").innerHTML!=""){
+    deleteImages();
+  }
+  var pageNum=document.getElementById("pageIn").value;
+  var whatToDis=(parseInt(pageNum)*numOfDisplayedImgs)-numOfDisplayedImgs;
+  if(whatToDis>=indexTxtData.jpgDataArr.length){
+    alert("There are not that many pages.");
+    // return;
+  }
+  else if(intIn==1){
+    count=whatToDis;
+    loadNextImages();
+    pageNumber=pageNum;
+    document.getElementById("pageNumber").innerHTML=""+parseInt(pageNum)+"";
+  }else if(intIn==0){
+    var forCount=whatToDis;
+    for(forCount;forCount<whatToDis+numOfDisplayedImgs;forCount++){
+      addImagesToPageOne(indexTxtData.jpgDataArr[forCount].src, forCount);
+  }
+  window.setTimeout(function() { lazyload(); }, 1);
+
+  }
+  
+  
 }

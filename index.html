@@ -20,8 +20,7 @@
   <p id="quote1">Every Family has a Story to Tell...</p>
     <p id="quote2">Welcome to Ours</p>
 </div>
-   <div id="images">
-   </div>
+   <div id="images"></div>
    <div id="buttons">
     <!-- <input id="clearIndex" type="button" value="Clear Index" onclick="clearIndex();"/>
     <input id="nextpage" type="button" value="Next Page" onclick="loadNextImages();"/>
@@ -138,21 +137,28 @@
 <!-- <input type="button" id="search" value="Search" onclick="startApp(2);"/> -->
 <button type="button" id="search" onclick="startApp(2);">Search</button>
 
+<div>
+  <input id="pageIn"type="text" placeholder="Go to Page...">
+  <button type="button" onclick="getPageNum(0);">Display Page</button>
+  <button type="button" onClick="getPageNum(1);">Go To Page</button>
+</div>
+    <!-- <input type="submit" value="Display Page" onclick="getPageNum(0);">
+    <input type="submit" value="Go To Page" onClick="getPageNum(1)" -->
+  
 
 <div id="progressBar" class="loadBar">
   <span style="width:100%"></span>
   <p></p>
 </div>
-
-
 </div>
 
 <div id="searchButtons">
   <button type="button" id="searchButton" onclick="clearSearch();">Clear Search</button>
   <button type="button" id="searchButton" onclick="nextSearchImgs();">Next Page</button>
   <button type="button" id="searchButton" onclick="previousSearchImgs();">Previous Page</button>
-
 </div>
+
+<p id="pageNumber"></p>
 
 
 <!-- THIS IS AN TEST IMG TAG DONT DELETE -->

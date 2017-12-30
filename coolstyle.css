@@ -38,7 +38,9 @@
 .round {
     border-radius: 50%;
 }
-  
+  #pageNumber{
+    text-align: center;
+  }
     
   #clickMe{
     /*position: fixed;*/
@@ -174,6 +176,22 @@ box-sizing: border-box;
 transition: .5s ease-in-out;
 }
 
+#pSrcHover{
+  visibility: hidden;
+    position: relative;
+    z-index: 4;
+    color: royalblue;
+    top: 690px;
+    right: 32%;
+}
+
+#aHover:hover >#pSrcHover{
+  visibility: visible;
+}
+
+/*#content:hover #hoverbar{
+    visibility:visible;
+}*/
 /* Provides part of the "X" to eliminate an image from the close link */
 
 a.lightbox-close:before {
