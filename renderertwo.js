@@ -31,14 +31,14 @@ var indexLoc=appDir+"/index.txt";
 // const imgFolder="/Users/msivraj/Documents/imgs"
 // var menu = document.getElementById("numOfImgMenu");
 // var imgsToDisplay = menu.options[menu.selectedIndex].text;
-var numOfDisplayedImgs=10;
+var numOfDisplayedImgs=70;
 
 const {dialog} = __electron.remote;
 
 
 window.addEventListener("DOMContentLoaded", function(event) {
   startApp(3);
-    // window.setTimeout(function() { lazyload(); }, 200);
+    // window.setTimeout(function() { lazyload(); }, 1);
 });
 
 
@@ -88,7 +88,7 @@ function loadNextImages() {
       }
     
     }
-    window.setTimeout(function() { lazyload(); }, 500);
+    window.setTimeout(function() { lazyload(); }, 1);
   // }
     
   
@@ -137,7 +137,7 @@ function loadPreviousImages(){
     // }
     
   // }
-  window.setTimeout(function() { lazyload(); }, 500);
+  window.setTimeout(function() { lazyload(); }, 1);
   
 }
 
@@ -199,7 +199,7 @@ function loadIntialImages(items){
       
        document.getElementById('images').appendChild(newSpan);
     //  });   
-    //  window.setTimeout(function() { lazyload(); }, 500);
+    //  window.setTimeout(function() { lazyload(); }, 1);
 
    }
    
@@ -219,7 +219,7 @@ function loadIntialImages(items){
          searchCount++;
      }
      
-     window.setTimeout(function() { lazyload(); }, 200);
+     window.setTimeout(function() { lazyload(); }, 1);
    }else{
      alert("No images were indexed for this year.");
      clearSearch();
@@ -273,7 +273,7 @@ function loadIntialImages(items){
     // }
     
   // }
-  window.setTimeout(function() { lazyload(); }, 500);
+  window.setTimeout(function() { lazyload(); }, 1);
   
 }
    
@@ -303,30 +303,34 @@ function loadIntialImages(items){
    
   function saveMemory(buttonId, imgNum) {
      
-     //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
-     var image=document.getElementById("img"+imgNum+"")
-     var fileLocation=image.src+".memory.txt"
+    //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
+    var image=document.getElementById("img"+imgNum+"")
+    var memoryLocation = appDir + image.src.substring(7) + ".memory.txt";
+
     //  var file='/memory'+imgNum+'.txt';
-     var textBoxId='memory'+imgNum;
+    var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
-     var toWrite=document.getElementById(textBoxId).value;
-     __fsExtra.outputFile(fileLocation, toWrite, (err) => {
-       if (err) throw err;
-  // console.log('The file has been saved!');
+    var toWrite=document.getElementById(textBoxId).value;
+    __fsExtra.outputFile(memoryLocation, toWrite, (err) => {
+      if (err) throw err;
+      // console.log('The file has been saved!');
     });
-     //writeToFile(filePath, toWrite);
+    
+    //writeToFile(filePath, toWrite);
   }
    
    function displaySavedMemory(imgNum){
     //  var fileLocation=appDir+"/memories/"+imgNum+"/memory.txt";
     //  var file='/memory'+imgNumber+'.txt';
     var image=document.getElementById("img"+imgNum+"")
-    var fileLocation=image.src+".memory.txt"
+    var memoryLocation = appDir + image.src.substring(7) + ".memory.txt";
     var textBoxId='memory'+imgNum;
     //  var filePath= folderLocation + file;
 
-     __fsExtra.readFile(fileLocation, function(err, items){
-       document.getElementById(textBoxId).value = items;
+     __fsExtra.readFile(memoryLocation, function(err, items){
+       if(items) {
+         document.getElementById(textBoxId).value = items;
+       }
      });     
    }
    
@@ -726,7 +730,7 @@ function searchImages(){
   // });
   // addImagesToPageOne(arrOfImgs);
   nextSearchImgs();
-  // window.setTimeout(function() { lazyload(); }, 200);
+  // window.setTimeout(function() { lazyload(); }, 1);
 }
 
 function parseDate(dayIn, monthIn, yearIn, dateIn){
