@@ -101,3 +101,26 @@
 //     p.html(current + "%");
 
 
+window.addEventListener("DOMContentLoaded", function(event) {
+  var returnValStr="";
+  var returnValInt=0;
+  var lboxImg=document.getElementById("happy");
+  lboxImg.style.transform="rotate(90deg)"
+  var trans=lboxImg.style.transform;
+  var firstSplit=trans.split('(')
+  var secondSplit=firstSplit[1];
+  for(var i=0 ;i<firstSplit[1].length;i++){
+    if(Number.isInteger(parseInt(firstSplit[1].charAt(i)))){
+      returnValStr+=firstSplit[1].charAt(i)
+      returnValInt=parseInt(returnValStr);
+    }
+  }
+  
+  console.log(returnValInt);
+
+  
+  
+    // window.setTimeout(function() { lazyload(); }, 200);
+});
+
+
